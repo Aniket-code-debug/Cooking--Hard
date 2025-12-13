@@ -1,9 +1,12 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, ShoppingCart, Users, FileBarChart, LogOut } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingCart, Users, FileBarChart, LogOut, Sun, Moon, Settings as SettingsIcon } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
+import BottomNav from './BottomNav';
 
 const Layout = () => {
     const { logout, user } = useAuth();
+    const { isDarkMode, toggleTheme } = useTheme();
     const location = useLocation();
 
     const navItems = [
@@ -12,15 +15,16 @@ const Layout = () => {
         { label: 'Purchases', path: '/purchases', icon: <ShoppingCart size={20} /> },
         { label: 'Suppliers', path: '/suppliers', icon: <Users size={20} /> },
         { label: 'Reports', path: '/reports', icon: <FileBarChart size={20} /> },
+        { label: 'Settings', path: '/settings', icon: <SettingsIcon size={20} /> },
     ];
 
     return (
-        <div className="flex h-screen bg-gray-100">
+        <div className="flex h-screen bg-gray-50 dark:bg-gfg-bg-dark text-gray-900 dark:text-gray-100 transition-colors duration-200">
             {/* Sidebar */}
-            <aside className="w-64 bg-white shadow-md hidden md:flex flex-col">
-                <div className="p-6 border-b">
-                    <h1 className="text-2xl font-bold text-blue-600">KiranaFlow</h1>
-                    <p className="text-sm text-gray-500 mt-1">{user?.shopName}</p>
+            <aside className="w-64 bg-white dark:bg-gfg-green-dark shadow-md hidden md:flex flex-col border-r dark:border-gray-700">
+                <div className="p-6 border-b dark:border-gray-700">
+                    <h1 className="text-2xl font-bold text-gfg-green">KiranaFlow</h1>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{user?.shopName}</p>
                 </div>
                 <nav className="flex-1 p-4 space-y-2">
                     {navItems.map((item) => (
@@ -28,8 +32,8 @@ const Layout = () => {
                             key={item.path}
                             to={item.path}
                             className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${location.pathname === item.path
-                                    ? 'bg-blue-50 text-blue-600'
-                                    : 'text-gray-600 hover:bg-gray-50'
+                                ? 'bg-green-50 text-gfg-green dark:bg-green-900/20 dark:text-green-400'
+                                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                                 }`}
                         >
                             {item.icon}
@@ -37,24 +41,28 @@ const Layout = () => {
                         </Link>
                     ))}
                 </nav>
-                <div className="p-4 border-t">
+                <div className="p-4 border-t dark:border-gray-700 flex items-center justify-between">
+                    <button onClick={toggleTheme} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300">
+                        {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+                    </button>
                     <button
                         onClick={logout}
-                        className="flex items-center space-x-3 px-4 py-3 w-full text-red-500 hover:bg-red-50 rounded-lg"
+                        className="flex items-center space-x-2 px-3 py-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-sm font-medium"
                     >
-                        <LogOut size={20} />
-                        <span className="font-medium">Logout</span>
+                        <LogOut size={18} />
+                        <span>Logout</span>
                     </button>
                 </div>
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 overflow-y-auto">
-                {/* Mobile Header could go here */}
-                <div className="p-8">
+            <main className="flex-1 overflow-y-auto pb-16 md:pb-0">
+                <div className="p-4 md:p-8">
                     <Outlet />
                 </div>
             </main>
+
+            <BottomNav />
         </div>
     );
 };

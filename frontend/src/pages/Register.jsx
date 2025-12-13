@@ -21,31 +21,33 @@ const Register = () => {
         }
     };
 
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full bg-white p-8 rounded-xl shadow-lg">
-                <h2 className="text-3xl font-bold text-center text-blue-600 mb-2">Create Account</h2>
-                <p className="text-center text-gray-500 mb-8">Start managing your shop today</p>
+    const inputClass = "w-full px-4 py-2 border dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-gfg-green focus:outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white";
 
-                {error && <div className="bg-red-50 text-red-500 p-3 rounded mb-4 text-sm">{error}</div>}
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gfg-bg-dark transition-colors duration-200 py-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-md w-full bg-white dark:bg-gfg-surface-dark p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+                <h2 className="text-3xl font-bold text-center text-gfg-green mb-2">Create Account</h2>
+                <p className="text-center text-gray-500 dark:text-gray-400 mb-8">Start managing your shop today</p>
+
+                {error && <div className="bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400 p-3 rounded mb-4 text-sm">{error}</div>}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
-                        <input name="shopName" placeholder="Shop Name" onChange={handleChange} className="w-full px-4 py-2 border rounded-lg" required />
-                        <input name="ownerName" placeholder="Owner Name" onChange={handleChange} className="w-full px-4 py-2 border rounded-lg" required />
+                        <input name="shopName" placeholder="Shop Name" onChange={handleChange} className={inputClass} required />
+                        <input name="ownerName" placeholder="Owner Name" onChange={handleChange} className={inputClass} required />
                     </div>
-                    <input name="email" type="email" placeholder="Email" onChange={handleChange} className="w-full px-4 py-2 border rounded-lg" required />
-                    <input name="password" type="password" placeholder="Password" onChange={handleChange} className="w-full px-4 py-2 border rounded-lg" required />
-                    <input name="phone" placeholder="Phone" onChange={handleChange} className="w-full px-4 py-2 border rounded-lg" required />
-                    <input name="gstin" placeholder="GSTIN (Optional)" onChange={handleChange} className="w-full px-4 py-2 border rounded-lg" />
-                    <textarea name="address" placeholder="Address" onChange={handleChange} className="w-full px-4 py-2 border rounded-lg" rows="2"></textarea>
+                    <input name="email" type="email" placeholder="Email" onChange={handleChange} className={inputClass} required />
+                    <input name="password" type="password" placeholder="Password" onChange={handleChange} className={inputClass} required />
+                    <input name="phone" placeholder="Phone" onChange={handleChange} className={inputClass} required />
+                    <input name="gstin" placeholder="GSTIN (Optional)" onChange={handleChange} className={inputClass} />
+                    <textarea name="address" placeholder="Address" onChange={handleChange} className={inputClass} rows="2"></textarea>
 
-                    <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                    <button type="button" className="w-full bg-gfg-green text-white py-2 rounded-lg font-medium hover:bg-green-700 transition-colors" onClick={handleSubmit}>
                         Register Shop
                     </button>
                 </form>
-                <p className="mt-4 text-center text-sm text-gray-600">
-                    Already have an account? <Link to="/login" className="text-blue-600 hover:underline">Sign In</Link>
+                <p className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
+                    Already have an account? <Link to="/login" className="text-gfg-green hover:underline">Sign In</Link>
                 </p>
             </div>
         </div>

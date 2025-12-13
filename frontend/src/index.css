@@ -1,5 +1,21 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-gfg-green: #1a75b0;
+  --color-gfg-green-dark: #123d5c;
+  --color-gfg-bg-dark: #121212;
+  --color-gfg-surface-dark: #1e1e1e;
+}
+
+:root {
+  --gfg-green: #1a75b0;
+}
 
 body {
-  @apply bg-gray-50 text-gray-900;
+  @apply bg-white text-gray-900 transition-colors duration-200;
+}
+
+.dark body {
+  @apply bg-gfg-bg-dark text-gray-100;
 }

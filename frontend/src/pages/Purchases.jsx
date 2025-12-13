@@ -1,139 +1,126 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Plus, Trash } from 'lucide-react';
+import { Plus, Trash, Check } from 'lucide-react';
 
 const Purchases = () => {
-    const [purchases, setPurchases] = useState([]);
     const [suppliers, setSuppliers] = useState([]);
     const [products, setProducts] = useState([]);
-    const [showAddForm, setShowAddForm] = useState(false);
+    const [step, setStep] = useState(1); // 1: Supplier & Invoice, 2: Items
 
     const [formData, setFormData] = useState({
         supplier: '', invoiceNumber: '', date: new Date().toISOString().split('T')[0],
         items: [], cgst: 0, sgst: 0, igst: 0
     });
 
+    const [currentItem, setCurrentItem] = useState({ product: '', batchNumber: '', quantity: '', purchaseRate: '', sellingPrice: '' });
+
     useEffect(() => {
-        fetchData();
+        const fetch = async () => {
+            try {
+                const [sRes, pRes] = await Promise.all([
+                    axios.get('http://localhost:5000/api/suppliers'),
+                    axios.get('http://localhost:5000/api/inventory/products')
+                ]);
+                setSuppliers(sRes.data);
+                setProducts(pRes.data);
+            } catch (err) { }
+        };
+        fetch();
     }, []);
 
-    const fetchData = async () => {
-        try {
-            const [pRes, sRes, prodRes] = await Promise.all([
-                axios.get('http://localhost:5000/api/purchases'),
-                axios.get('http://localhost:5000/api/suppliers'),
-                axios.get('http://localhost:5000/api/inventory/products')
-            ]);
-            setPurchases(pRes.data);
-            setSuppliers(sRes.data);
-            setProducts(prodRes.data);
-        } catch (err) { console.error(err); }
-    };
-
     const addItem = () => {
+        if (!currentItem.product || !currentItem.quantity) return;
         setFormData({
             ...formData,
-            items: [...formData.items, { product: '', batchNumber: '', expiryDate: '', mrp: 0, purchaseRate: 0, sellingPrice: 0, quantity: 1 }]
+            items: [...formData.items, { ...currentItem, mrp: currentItem.sellingPrice }] // Assuming MRP=SP for speed
         });
+        setCurrentItem({ product: '', batchNumber: '', quantity: '', purchaseRate: '', sellingPrice: '' });
     };
 
-    const updateItem = (index, field, value) => {
-        const newItems = [...formData.items];
-        newItems[index][field] = value;
-        setFormData({ ...formData, items: newItems });
+    const removeItem = (idx) => {
+        setFormData({ ...formData, items: formData.items.filter((_, i) => i !== idx) });
     };
 
-    const removeItem = (index) => {
-        const newItems = formData.items.filter((_, i) => i !== index);
-        setFormData({ ...formData, items: newItems });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        // Calculate totals logic if needed, simplify for now
+    const handleSubmit = async () => {
         let total = formData.items.reduce((acc, item) => acc + (item.quantity * item.purchaseRate), 0);
-        // Add taxes
-        total += parseFloat(formData.cgst) + parseFloat(formData.sgst) + parseFloat(formData.igst);
-
         try {
             await axios.post('http://localhost:5000/api/purchases', { ...formData, totalAmount: total });
-            setShowAddForm(false);
-            fetchData();
-        } catch (err) { alert('Failed to create purchase'); }
+            alert('Purchase Recorded!');
+            setFormData({ supplier: '', invoiceNumber: '', date: new Date().toISOString().split('T')[0], items: [], cgst: 0, sgst: 0, igst: 0 });
+            setStep(1);
+        } catch (err) { alert('Error recording purchase'); }
     };
 
-    return (
-        <div>
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold">Purchases</h1>
-                <button onClick={() => setShowAddForm(!showAddForm)} className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
-                    <Plus size={18} /> <span>New Purchase</span>
-                </button>
-            </div>
+    const inputClass = "w-full p-3 bg-gray-50 dark:bg-gray-800 border-none rounded-lg dark:text-white";
 
-            {showAddForm && (
-                <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow mb-6 border border-gray-100">
-                    <h3 className="font-bold text-lg mb-4">New Inward Supply</h3>
-                    <div className="grid grid-cols-3 gap-4 mb-4">
-                        <select className="border p-2 rounded" value={formData.supplier} onChange={e => setFormData({ ...formData, supplier: e.target.value })} required>
+    return (
+        <div className="pb-20 max-w-lg mx-auto">
+            <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Record Purchase</h1>
+
+            {step === 1 && (
+                <div className="space-y-4 bg-white dark:bg-gfg-surface-dark p-6 rounded-xl shadow-sm">
+                    <div>
+                        <label className="block text-sm text-gray-500 mb-1">Supplier</label>
+                        <select className={inputClass} value={formData.supplier} onChange={e => setFormData({ ...formData, supplier: e.target.value })}>
                             <option value="">Select Supplier</option>
                             {suppliers.map(s => <option key={s._id} value={s._id}>{s.name}</option>)}
                         </select>
-                        <input placeholder="Invoice No" className="border p-2 rounded" value={formData.invoiceNumber} onChange={e => setFormData({ ...formData, invoiceNumber: e.target.value })} />
-                        <input type="date" className="border p-2 rounded" value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value })} />
                     </div>
-
-                    <div className="mb-4">
-                        <h4 className="font-semibold mb-2">Items</h4>
-                        {formData.items.map((item, idx) => (
-                            <div key={idx} className="grid grid-cols-7 gap-2 mb-2 items-center">
-                                <select className="col-span-1 border p-1 rounded text-sm" value={item.product} onChange={e => updateItem(idx, 'product', e.target.value)} required>
-                                    <option value="">Product</option>
-                                    {products.map(p => <option key={p._id} value={p._id}>{p.name}</option>)}
-                                </select>
-                                <input placeholder="Batch No" className="border p-1 rounded text-sm" value={item.batchNumber} onChange={e => updateItem(idx, 'batchNumber', e.target.value)} required />
-                                <input type="number" placeholder="Qty" className="border p-1 rounded text-sm" value={item.quantity} onChange={e => updateItem(idx, 'quantity', e.target.value)} required />
-                                <input type="number" placeholder="Rate" className="border p-1 rounded text-sm" value={item.purchaseRate} onChange={e => updateItem(idx, 'purchaseRate', e.target.value)} required />
-                                <input type="number" placeholder="MRP" className="border p-1 rounded text-sm" value={item.mrp} onChange={e => updateItem(idx, 'mrp', e.target.value)} required />
-                                <input type="number" placeholder="SP" className="border p-1 rounded text-sm" value={item.sellingPrice} onChange={e => updateItem(idx, 'sellingPrice', e.target.value)} required />
-                                <button type="button" onClick={() => removeItem(idx)} className="text-red-500"><Trash size={16} /></button>
-                            </div>
-                        ))}
-                        <button type="button" onClick={addItem} className="text-sm text-blue-600 font-medium">+ Add Item</button>
+                    <div>
+                        <label className="block text-sm text-gray-500 mb-1">Invoice No</label>
+                        <input className={inputClass} value={formData.invoiceNumber} onChange={e => setFormData({ ...formData, invoiceNumber: e.target.value })} placeholder="e.g. INV-001" />
                     </div>
-
-                    <div className="grid grid-cols-3 gap-4 mb-6">
-                        <input type="number" placeholder="CGST Total" className="border p-2 rounded" value={formData.cgst} onChange={e => setFormData({ ...formData, cgst: e.target.value })} />
-                        <input type="number" placeholder="SGST Total" className="border p-2 rounded" value={formData.sgst} onChange={e => setFormData({ ...formData, sgst: e.target.value })} />
-                        <input type="number" placeholder="IGST Total" className="border p-2 rounded" value={formData.igst} onChange={e => setFormData({ ...formData, igst: e.target.value })} />
+                    <div>
+                        <label className="block text-sm text-gray-500 mb-1">Date</label>
+                        <input type="date" className={inputClass} value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value })} />
                     </div>
-
-                    <button type="submit" className="bg-green-600 text-white px-6 py-2 rounded">Submit Purchase</button>
-                </form>
+                    <button onClick={() => setStep(2)} className="w-full bg-gfg-green text-white py-3 rounded-lg font-bold mt-4">Next: Add Items</button>
+                </div>
             )}
 
-            <div className="bg-white rounded-lg shadow overflow-hidden">
-                <table className="w-full text-left">
-                    <thead className="bg-gray-50 border-b">
-                        <tr>
-                            <th className="px-6 py-3">Date</th>
-                            <th className="px-6 py-3">Supplier</th>
-                            <th className="px-6 py-3">Invoice</th>
-                            <th className="px-6 py-3">Total Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                        {purchases.map(p => (
-                            <tr key={p._id} className="hover:bg-gray-50">
-                                <td className="px-6 py-4">{new Date(p.date).toLocaleDateString()}</td>
-                                <td className="px-6 py-4">{p.supplier?.name || 'Unknown'}</td>
-                                <td className="px-6 py-4">{p.invoiceNumber}</td>
-                                <td className="px-6 py-4 font-bold">₹{p.totalAmount}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+            {step === 2 && (
+                <div className="space-y-4">
+                    {/* Item Entry Form */}
+                    <div className="bg-white dark:bg-gfg-surface-dark p-4 rounded-xl shadow-sm space-y-3">
+                        <h3 className="font-bold text-gray-700 dark:text-gray-200">Add Item</h3>
+                        <select className={inputClass} value={currentItem.product} onChange={e => setCurrentItem({ ...currentItem, product: e.target.value })}>
+                            <option value="">Select Product</option>
+                            {products.map(p => <option key={p._id} value={p._id}>{p.name}</option>)}
+                        </select>
+                        <div className="grid grid-cols-2 gap-3">
+                            <input type="number" placeholder="Qty" className={inputClass} value={currentItem.quantity} onChange={e => setCurrentItem({ ...currentItem, quantity: e.target.value })} />
+                            <input placeholder="Batch (Opt)" className={inputClass} value={currentItem.batchNumber} onChange={e => setCurrentItem({ ...currentItem, batchNumber: e.target.value })} />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <input type="number" placeholder="Buy Rate" className={inputClass} value={currentItem.purchaseRate} onChange={e => setCurrentItem({ ...currentItem, purchaseRate: e.target.value })} />
+                            <input type="number" placeholder="Sell Price" className={inputClass} value={currentItem.sellingPrice} onChange={e => setCurrentItem({ ...currentItem, sellingPrice: e.target.value })} />
+                        </div>
+                        <button onClick={addItem} className="w-full border-2 border-gfg-green text-gfg-green py-2 rounded-lg font-medium">Add to List</button>
+                    </div>
+
+                    {/* List of Added Items */}
+                    {formData.items.length > 0 && (
+                        <div className="space-y-2">
+                            {formData.items.map((item, idx) => (
+                                <div key={idx} className="bg-gray-50 dark:bg-gray-800 p-3 rounded-lg flex justify-between items-center">
+                                    <div>
+                                        <p className="font-bold dark:text-white">{products.find(p => p._id === item.product)?.name}</p>
+                                        <p className="text-xs text-gray-500">Qty: {item.quantity} x ₹{item.purchaseRate}</p>
+                                    </div>
+                                    <button onClick={() => removeItem(idx)} className="text-red-500"><Trash size={18} /></button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    <div className="flex space-x-3 pt-4">
+                        <button onClick={() => setStep(1)} className="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-3 rounded-lg font-bold">Back</button>
+                        <button onClick={handleSubmit} className="flex-1 bg-gfg-green text-white py-3 rounded-lg font-bold flex justify-center items-center space-x-2">
+                            <Check size={20} /> <span>Save Purchase</span>
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
