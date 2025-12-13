@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Package, ShoppingCart, FileBarChart, Settings } from 'lucide-react';
+import { Home, Package, ShoppingCart, FileBarChart, Settings, BookOpen } from 'lucide-react';
 
 const BottomNav = () => {
     const location = useLocation();
@@ -8,6 +8,7 @@ const BottomNav = () => {
         { label: 'Home', path: '/', icon: <Home size={20} /> },
         { label: 'Stock', path: '/inventory', icon: <Package size={20} /> },
         { label: 'Buy', path: '/purchases', icon: <ShoppingCart size={20} /> },
+        { label: 'Book', path: '/capital', icon: <BookOpen size={20} /> },
         { label: 'Reports', path: '/reports', icon: <FileBarChart size={20} /> },
         { label: 'Settings', path: '/settings', icon: <Settings size={20} /> },
     ];

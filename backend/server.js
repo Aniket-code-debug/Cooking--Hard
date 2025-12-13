@@ -15,11 +15,19 @@ app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/inventory', require('./routes/inventoryRoutes'));
-app.use('/api/suppliers', require('./routes/supplierRoutes'));
-app.use('/api/purchases', require('./routes/purchaseRoutes'));
-app.use('/api/reports', require('./routes/reportsRoutes'));
+const authRoutes = require('./routes/authRoutes');
+const inventoryRoutes = require('./routes/inventoryRoutes');
+const supplierRoutes = require('./routes/supplierRoutes');
+const purchaseRoutes = require('./routes/purchaseRoutes');
+const reportsRoutes = require('./routes/reportsRoutes');
+const capitalRoutes = require('./routes/capitalRoutes');
+
+app.use('/api/auth', authRoutes);
+app.use('/api/inventory', inventoryRoutes);
+app.use('/api/suppliers', supplierRoutes);
+app.use('/api/purchases', purchaseRoutes);
+app.use('/api/reports', reportsRoutes);
+app.use('/api/capital', capitalRoutes);
 
 // Database Connection
 mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/kirana_inventory')

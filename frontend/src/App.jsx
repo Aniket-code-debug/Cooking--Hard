@@ -10,6 +10,7 @@ import Suppliers from './pages/Suppliers';
 import Purchases from './pages/Purchases';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
+import Capital from './pages/Capital';
 
 const PrivateRoute = ({ children }) => {
   const { token } = useAuth();
@@ -30,6 +31,7 @@ function App() {
               <Route path="suppliers" element={<Suppliers />} />
               <Route path="purchases" element={<Purchases />} />
               <Route path="reports" element={<Reports />} />
+              <Route path="capital" element={<Capital />} />
               <Route path="settings" element={<Settings />} />
             </Route>
           </Routes>
