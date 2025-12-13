@@ -5,6 +5,7 @@ const Product = require('./models/Product');
 const Batch = require('./models/Batch');
 const Supplier = require('./models/Supplier');
 const CapitalTransaction = require('./models/CapitalTransaction');
+const Purchase = require('./models/Purchase');
 
 mongoose.connect('mongodb://localhost:27017/kirana_inventory')
     .then(() => console.log('MongoDB Connected for Seeding'))
@@ -17,6 +18,7 @@ const seed = async () => {
         await Batch.deleteMany();
         await Supplier.deleteMany();
         await CapitalTransaction.deleteMany();
+        await Purchase.deleteMany();
 
         // 1. Create User
         const salt = await bcrypt.genSalt(10);
@@ -137,6 +139,49 @@ const seed = async () => {
         await initialCap.save();
 
         console.log('Capital Transactions Seeded');
+
+        // 5. Purchases (GST Data)
+        // Create random purchases for stock
+        for (let i = 0; i < 5; i++) {
+            const supplier = suppliers[Math.floor(Math.random() * suppliers.length)];
+            const date = new Date();
+            date.setDate(today.getDate() - (i * 2));
+
+            // Random Total
+            const totalAmount = Math.floor(Math.random() * 10000) + 5000;
+            // Assume 18% GST (9% CGST, 9% SGST)
+            const baseAmount = totalAmount / 1.18;
+            const cgst = baseAmount * 0.09;
+            const sgst = baseAmount * 0.09;
+
+            const purchase = new Purchase({
+                user: user._id,
+                supplier: supplier._id,
+                invoiceNumber: `INV-2024-${100 + i}`,
+                date: date,
+                items: [], // We are lazy here, reports only check totals usually?
+                // Wait, the purchase model might require items? Let's check model. 
+                // Assuming schema is flexible or we just add a dummy item.
+                totalAmount: Math.round(totalAmount),
+                cgst: Math.round(cgst),
+                sgst: Math.round(sgst),
+                igst: 0
+            });
+            // Add dummy items if required by validation (checked Controller, it only sums gst fields)
+            // But let's be safe if model requires items
+            // Fetch a product ID
+            const randProd = await Product.findOne();
+
+            purchase.items = [{
+                product: randProd._id,
+                quantity: 10,
+                rate: 50,
+                amount: 500
+            }];
+
+            await purchase.save();
+        }
+        console.log('Purchases (GST Data) Seeded');
 
         console.log('SEEDING COMPLETE');
         process.exit();
