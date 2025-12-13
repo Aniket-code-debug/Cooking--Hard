@@ -1,0 +1,24 @@
+const Supplier = require('../models/Supplier');
+
+exports.createSupplier = async (req, res) => {
+    try {
+        const { name, phone, gstin, address } = req.body;
+        const supplier = new Supplier({
+            user: req.user.id,
+            name, phone, gstin, address
+        });
+        await supplier.save();
+        res.status(201).json(supplier);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+exports.getSuppliers = async (req, res) => {
+    try {
+        const suppliers = await Supplier.find({ user: req.user.id });
+        res.json(suppliers);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
