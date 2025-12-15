@@ -30,9 +30,17 @@ app.use('/api/reports', reportsRoutes);
 app.use('/api/capital', capitalRoutes);
 
 // Database Connection
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/kirana_inventory')
+if (!process.env.MONGO_URI) {
+  console.error('FATAL ERROR: MONGO_URI is not defined in environment variables.');
+  process.exit(1);
+}
+
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB Connected'))
-  .catch(err => console.log(err));
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+    process.exit(1);
+  });
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

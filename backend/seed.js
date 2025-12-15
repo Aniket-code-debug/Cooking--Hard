@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const dotenv = require('dotenv');
 const User = require('./models/User');
 const Product = require('./models/Product');
 const Batch = require('./models/Batch');
@@ -7,9 +8,19 @@ const Supplier = require('./models/Supplier');
 const CapitalTransaction = require('./models/CapitalTransaction');
 const Purchase = require('./models/Purchase');
 
-mongoose.connect('mongodb://localhost:27017/kirana_inventory')
+dotenv.config();
+
+if (!process.env.MONGO_URI) {
+    console.error('FATAL ERROR: MONGO_URI is not defined in .env file.');
+    process.exit(1);
+}
+
+mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB Connected for Seeding'))
-    .catch(err => console.error(err));
+    .catch(err => {
+        console.error('MongoDB connection error:', err);
+        process.exit(1);
+    });
 
 const seed = async () => {
     try {
