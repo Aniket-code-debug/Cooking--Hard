@@ -3,6 +3,9 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
+// ✅ USE ENV VARIABLE
+const API_URL = import.meta.env.VITE_API_URL;
+
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -13,7 +16,12 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+            const API_URL = import.meta.env.VITE_API_URL;
+            const res = await axios.post(
+                `${API_URL}/api/auth/login`,
+                { email, password }
+            );
+
             login(res.data.user, res.data.token);
             navigate('/');
         } catch (err) {
@@ -27,11 +35,17 @@ const Login = () => {
                 <h2 className="text-3xl font-bold text-center text-gfg-green mb-2">KiranaFlow</h2>
                 <p className="text-center text-gray-500 dark:text-gray-400 mb-8">Sign in to manage your shop</p>
 
-                {error && <div className="bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400 p-3 rounded mb-4 text-sm">{error}</div>}
+                {error && (
+                    <div className="bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400 p-3 rounded mb-4 text-sm">
+                        {error}
+                    </div>
+                )}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Email
+                        </label>
                         <input
                             type="email"
                             value={email}
@@ -40,8 +54,11 @@ const Login = () => {
                             required
                         />
                     </div>
+
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Password
+                        </label>
                         <input
                             type="password"
                             value={password}
@@ -50,6 +67,7 @@ const Login = () => {
                             required
                         />
                     </div>
+
                     <button
                         type="submit"
                         className="w-full bg-gfg-green text-white py-2 rounded-lg font-medium hover:bg-green-700 transition-colors"
@@ -57,8 +75,12 @@ const Login = () => {
                         Sign In
                     </button>
                 </form>
+
                 <p className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
-                    Don't have an account? <Link to="/register" className="text-gfg-green hover:underline">Register</Link>
+                    Don't have an account?{' '}
+                    <Link to="/register" className="text-gfg-green hover:underline">
+                        Register
+                    </Link>
                 </p>
             </div>
         </div>
