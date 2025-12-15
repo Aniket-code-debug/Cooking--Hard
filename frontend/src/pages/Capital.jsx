@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Plus, ArrowUpRight, ArrowDownLeft, Wallet, Building2 } from 'lucide-react';
 
 const Capital = () => {
+    const API_URL = import.meta.env.VITE_API_URL;
     const [transactions, setTransactions] = useState([]);
     const [summary, setSummary] = useState({ totalCredit: 0, totalDebit: 0, cashInHand: 0, bankBalance: 0 });
     const [showAdd, setShowAdd] = useState(false);
@@ -13,8 +14,8 @@ const Capital = () => {
     const fetchData = async () => {
         try {
             const [txRes, sumRes] = await Promise.all([
-                axios.get('http://localhost:5000/api/capital'),
-                axios.get('http://localhost:5000/api/capital/summary')
+                axios.get(`${API_URL}/api/capital`),
+                axios.get(`${API_URL}/api/capital/summary`)
             ]);
             setTransactions(txRes.data);
             setSummary(sumRes.data);
@@ -24,7 +25,7 @@ const Capital = () => {
     const handleAdd = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/capital', newTx);
+            await axios.post(`${API_URL}/api/capital`, newTx);
             setShowAdd(false);
             setNewTx({ type: 'CREDIT', amount: '', category: 'SALES', mode: 'CASH', description: '' });
             fetchData();

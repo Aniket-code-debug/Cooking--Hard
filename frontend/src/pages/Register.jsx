@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 
 const Register = () => {
+    const API_URL = import.meta.env.VITE_API_URL;
     const [formData, setFormData] = useState({
         shopName: '', ownerName: '', email: '', password: '', gstin: '', address: '', phone: ''
     });
@@ -14,7 +15,7 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/auth/register', formData);
+            await axios.post(`${API_URL}/api/auth/register`, formData);
             navigate('/login');
         } catch (err) {
             setError(err.response?.data?.message || 'Registration failed');

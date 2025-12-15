@@ -4,6 +4,7 @@ import { AlertCircle, Clock, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
+    const API_URL = import.meta.env.VITE_API_URL;
     const [alerts, setAlerts] = useState({ lowStock: [], expiring: [] });
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -11,7 +12,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchAlerts = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/inventory/alerts');
+                const res = await axios.get(`${API_URL}/api/inventory/alerts`);
                 setAlerts(res.data);
             } catch (err) { }
             setLoading(false);

@@ -3,12 +3,13 @@ import axios from 'axios';
 import { Download } from 'lucide-react';
 
 const Reports = () => {
+    const API_URL = import.meta.env.VITE_API_URL;
     const [gstData, setGstData] = useState({ totalCGST: 0, totalSGST: 0, totalIGST: 0, totalTax: 0 });
 
     useEffect(() => {
         const fetchReport = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/reports/gst');
+                const res = await axios.get(`${API_URL}/api/reports/gst`);
                 setGstData(res.data);
             } catch (err) { }
         };

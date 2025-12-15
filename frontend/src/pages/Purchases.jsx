@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Plus, Trash, Check } from 'lucide-react';
 
 const Purchases = () => {
+    const API_URL = import.meta.env.VITE_API_URL;
     const [suppliers, setSuppliers] = useState([]);
     const [products, setProducts] = useState([]);
     const [step, setStep] = useState(1); // 1: Supplier & Invoice, 2: Items
@@ -18,8 +19,8 @@ const Purchases = () => {
         const fetch = async () => {
             try {
                 const [sRes, pRes] = await Promise.all([
-                    axios.get('http://localhost:5000/api/suppliers'),
-                    axios.get('http://localhost:5000/api/inventory/products')
+                    axios.get(`${API_URL}/api/suppliers`),
+                    axios.get(`${API_URL}/api/inventory/products`)
                 ]);
                 setSuppliers(sRes.data);
                 setProducts(pRes.data);
@@ -44,7 +45,7 @@ const Purchases = () => {
     const handleSubmit = async () => {
         let total = formData.items.reduce((acc, item) => acc + (item.quantity * item.purchaseRate), 0);
         try {
-            await axios.post('http://localhost:5000/api/purchases', { ...formData, totalAmount: total });
+            await axios.post(`${API_URL}/api/purchases`, { ...formData, totalAmount: total });
             alert('Purchase Recorded!');
             setFormData({ supplier: '', invoiceNumber: '', date: new Date().toISOString().split('T')[0], items: [], cgst: 0, sgst: 0, igst: 0 });
             setStep(1);

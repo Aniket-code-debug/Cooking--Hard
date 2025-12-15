@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Plus, Minus, Search, Filter } from 'lucide-react';
 
 const Inventory = () => {
+    const API_URL = import.meta.env.VITE_API_URL;
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
@@ -41,7 +42,7 @@ const Inventory = () => {
             // I really should utilize `getAlerts` aggregation logic in `getProducts`.
             // Okay, I will update Backend `inventoryController.js` to return stock in `getProducts`!
             // That was part of "Optimize api/inventory" task.
-            const res = await axios.get('http://localhost:5000/api/inventory/products');
+            const res = await axios.get(`${API_URL}/api/inventory/products`);
             setProducts(res.data);
 
             // Temporary: fetch batches for all? Or just render products and allow click to expand?
@@ -53,7 +54,7 @@ const Inventory = () => {
 
     const handleQuickAdjust = async (productId, change) => {
         try {
-            await axios.post('http://localhost:5000/api/inventory/quick-adjust', { productId, change });
+            await axios.post(`${API_URL}/api/inventory/quick-adjust`, { productId, change });
             // Optimistic update
             setProducts(prev => prev.map(p => {
                 if (p._id === productId) {

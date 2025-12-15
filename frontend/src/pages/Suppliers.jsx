@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Plus, Phone, MapPin } from 'lucide-react';
 
 const Suppliers = () => {
+    const API_URL = import.meta.env.VITE_API_URL;
     const [suppliers, setSuppliers] = useState([]);
     const [showAddForm, setShowAddForm] = useState(false);
     const [newSupplier, setNewSupplier] = useState({ name: '', phone: '', gstin: '', address: '' });
@@ -11,7 +12,7 @@ const Suppliers = () => {
 
     const fetchSuppliers = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/suppliers');
+            const res = await axios.get(`${API_URL}/api/suppliers`);
             setSuppliers(res.data);
         } catch (err) { console.error(err); }
     };
@@ -19,7 +20,7 @@ const Suppliers = () => {
     const handleAdd = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/suppliers', newSupplier);
+            await axios.post(`${API_URL}/api/suppliers`, newSupplier);
             setShowAddForm(false);
             setNewSupplier({ name: '', phone: '', gstin: '', address: '' });
             fetchSuppliers();
