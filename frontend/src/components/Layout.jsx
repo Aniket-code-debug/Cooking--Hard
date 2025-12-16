@@ -21,10 +21,12 @@ const Layout = () => {
     return (
         <div className="flex h-screen bg-gray-50 dark:bg-gfg-bg-dark text-gray-900 dark:text-gray-100 transition-colors duration-200">
             {/* Sidebar */}
-            <aside className="w-64 bg-white dark:bg-gfg-green-dark shadow-md hidden md:flex flex-col border-r dark:border-gray-700">
+            <aside className="w-64 bg-white dark:bg-surface-dark shadow-md hidden md:flex flex-col border-r dark:border-gray-700">
                 <div className="p-6 border-b dark:border-gray-700">
-                    <h1 className="text-2xl font-bold text-gfg-green">KiranaFlow</h1>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{user?.shopName}</p>
+                    <h1 className="text-2xl font-bold text-primary dark:text-white drop-shadow-lg">
+                        KiranaFlow
+                    </h1>
+                    <p className="text-sm text-gray-500 dark:text-gray-300 mt-1">{user?.shopName}</p>
                 </div>
                 <nav className="flex-1 p-4 space-y-2">
                     {navItems.map((item) => (
