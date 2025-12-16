@@ -3,29 +3,29 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Primary Blue - RGB(30, 110, 244) */
-  --color-primary: #1E6EF4;
-  --color-primary-hover: #4A8BFF;
-  --color-primary-active: #1557C7;
+  /* Apple Blue */
+  --color-primary: #007AFF;
+  --color-primary-hover: #0051D5;
+  --color-primary-active: #004FC4;
 
   /* Accent Purple (Apple-inspired) */
   --color-accent: #AF52DE;
   --color-accent-hover: #C46EE8;
 
-  /* Dark Mode Backgrounds - RGB(28, 28, 30) */
+  /* Dark Mode Backgrounds */
   --color-bg-dark: #1C1C1E;
   --color-surface-dark: #2C2C2E;
   --color-surface-elevated: #3A3A3C;
 
-  /* Legacy support */
-  --color-gfg-green: #1E6EF4;
-  --color-gfg-green-dark: #1557C7;
+  /* Legacy support - Apple Blue */
+  --color-gfg-green: #007AFF;
+  --color-gfg-green-dark: #0051D5;
   --color-gfg-bg-dark: #1C1C1E;
   --color-gfg-surface-dark: #2C2C2E;
 }
 
 :root {
-  --gfg-green: #1E6EF4;
+  --gfg-green: #007AFF;
 }
 
 * {
@@ -33,7 +33,7 @@
 }
 
 body {
-  @apply bg-white text-gray-900 transition-colors duration-200;
+  @apply bg-[#F5F5F7] text-gray-900 transition-colors duration-200;
 }
 
 .dark body {

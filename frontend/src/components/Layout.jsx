@@ -21,8 +21,8 @@ const Layout = () => {
     return (
         <div className="flex h-screen bg-gray-50 dark:bg-gfg-bg-dark text-gray-900 dark:text-gray-100 transition-colors duration-200">
             {/* Sidebar */}
-            <aside className="w-64 bg-white dark:bg-gfg-green-dark shadow-md hidden md:flex flex-col border-r dark:border-gray-700">
-                <div className="p-6 border-b dark:border-gray-700">
+            <aside className="w-64 bg-white dark:bg-gfg-green-dark shadow-md hidden md:flex flex-col">
+                <div className="p-6">
                     <h1 className="text-2xl font-bold text-primary dark:text-white drop-shadow-lg">
                         KiranaFlow
                     </h1>
@@ -43,7 +43,7 @@ const Layout = () => {
                         </Link>
                     ))}
                 </nav>
-                <div className="p-4 border-t dark:border-gray-700 flex items-center justify-between">
+                <div className="p-4 flex items-center justify-between">
                     <button onClick={toggleTheme} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300">
                         {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
                     </button>
