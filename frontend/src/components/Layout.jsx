@@ -57,7 +57,7 @@ const Layout = () => {
 
             {/* Main Content */}
             <main className="flex-1 overflow-y-auto pb-16 md:pb-0">
-                <div className="p-4 md:p-8">
+                <div className="p-4 md:p-8 page-transition-enter">
                     <Outlet />
                 </div>
             </main>

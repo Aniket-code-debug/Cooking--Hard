@@ -45,7 +45,7 @@ const Capital = () => {
                     </div>
                     <h2 className="text-2xl font-bold">₹{summary.cashInHand.toLocaleString()}</h2>
                 </div>
-                <div className="bg-blue-600 text-white p-4 rounded-xl shadow-lg">
+                <div className="bg-primary text-white p-4 rounded-xl shadow-lg">
                     <div className="flex items-center space-x-2 mb-1 opacity-90">
                         <Building2 size={18} /> <span className="text-sm">Bank Balance</span>
                     </div>

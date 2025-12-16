@@ -59,7 +59,7 @@ const Suppliers = () => {
                         <div className="mt-3 space-y-2 text-sm text-gray-600 dark:text-gray-300">
                             <div className="flex items-center space-x-2"><Phone size={16} /> <span>{s.phone}</span></div>
                             <div className="flex items-center space-x-2"><MapPin size={16} /> <span>{s.address || 'No Address'}</span></div>
-                            {s.gstin && <div className="text-xs bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-1 inline-block rounded">GST: {s.gstin}</div>}
+                            {s.gstin && <div className="text-xs bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-hover px-2 py-1 inline-block rounded">GST: {s.gstin}</div>}
                         </div>
                     </div>
                 ))}

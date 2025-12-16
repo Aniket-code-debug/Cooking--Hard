@@ -20,7 +20,7 @@ const Reports = () => {
         <div className="pb-20 max-w-lg mx-auto">
             <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Reports</h1>
 
-            <div className="bg-gradient-to-br from-gfg-green to-blue-600 rounded-2xl p-6 text-white shadow-lg mb-6">
+            <div className="bg-gradient-to-br from-gfg-green to-primary rounded-2xl p-6 text-white shadow-lg mb-6">
                 <p className="opacity-90 text-sm mb-1">Total GST Input Credit</p>
                 <h2 className="text-4xl font-bold mb-4">₹{gstData.totalTax.toLocaleString()}</h2>
 

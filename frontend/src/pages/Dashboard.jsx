@@ -79,9 +79,9 @@ const Dashboard = () => {
             <div className="mt-8">
                 <h2 className="text-lg font-bold mb-3 text-gray-900 dark:text-white">Quick Actions</h2>
                 <div className="grid grid-cols-2 gap-4">
-                    <button onClick={() => navigate('/purchases')} className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl text-center">
+                    <button onClick={() => navigate('/purchases')} className="p-4 bg-primary/10 dark:bg-primary/20 rounded-xl text-center hover:bg-primary/20 dark:hover:bg-primary/30 transition-all">
                         <span className="block text-2xl mb-1">🛒</span>
-                        <span className="font-bold text-blue-700 dark:text-blue-300">New Purchase</span>
+                        <span className="font-bold text-primary dark:text-primary-hover">New Purchase</span>
                     </button>
                     <button onClick={() => navigate('/inventory')} className="p-4 bg-green-50 dark:bg-green-900/20 rounded-xl text-center">
                         <span className="block text-2xl mb-1">📦</span>

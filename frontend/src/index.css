@@ -1,15 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-gfg-green: #1a75b0;
-  --color-gfg-green-dark: #123d5c;
-  --color-gfg-bg-dark: #121212;
-  --color-gfg-surface-dark: #1e1e1e;
+  /* Primary Blue - RGB(30, 110, 244) */
+  --color-primary: #1E6EF4;
+  --color-primary-hover: #4A8BFF;
+  --color-primary-active: #1557C7;
+
+  /* Accent Purple (Apple-inspired) */
+  --color-accent: #AF52DE;
+  --color-accent-hover: #C46EE8;
+
+  /* Dark Mode Backgrounds - RGB(28, 28, 30) */
+  --color-bg-dark: #1C1C1E;
+  --color-surface-dark: #2C2C2E;
+  --color-surface-elevated: #3A3A3C;
+
+  /* Legacy support */
+  --color-gfg-green: #1E6EF4;
+  --color-gfg-green-dark: #1557C7;
+  --color-gfg-bg-dark: #1C1C1E;
+  --color-gfg-surface-dark: #2C2C2E;
 }
 
 :root {
-  --gfg-green: #1a75b0;
+  --gfg-green: #1E6EF4;
+}
+
+* {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 body {
@@ -17,5 +37,38 @@ body {
 }
 
 .dark body {
-  @apply bg-gfg-bg-dark text-gray-100;
+  @apply bg-bg-dark text-gray-100;
+}
+
+/* Page Transition Animations */
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutToLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+
+.page-transition-enter {
+  animation: slideInFromRight 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.page-transition-exit {
+  animation: slideOutToLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
