@@ -52,7 +52,7 @@ const Settings = () => {
                 </div>
 
                 <div className="flex justify-end">
-                    <button onClick={handleSave} className="flex items-center space-x-2 bg-gfg-green text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">
+                    <button onClick={handleSave} className="flex items-center space-x-2 bg-gfg-green text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
                         <Save size={18} />
                         <span>Save Changes</span>
                     </button>

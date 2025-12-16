@@ -43,9 +43,9 @@ const Dashboard = () => {
             <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Overview</h1>
 
             {!hasAlerts && (
-                <div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg text-center border border-green-100 dark:border-green-800">
-                    <CheckCircle className="mx-auto text-green-500 mb-2" size={48} />
-                    <h2 className="text-xl font-bold text-green-700 dark:text-green-400">All Good!</h2>
+                <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg text-center border border-blue-100 dark:border-blue-800">
+                    <CheckCircle className="mx-auto text-blue-500 mb-2" size={48} />
+                    <h2 className="text-xl font-bold text-blue-700 dark:text-blue-400">All Good!</h2>
                     <p className="text-gray-600 dark:text-gray-300">Inventory is healthy.</p>
                 </div>
             )}
@@ -97,9 +97,9 @@ const Dashboard = () => {
                         <span className="block text-2xl mb-1">🛒</span>
                         <span className="font-bold text-primary dark:text-primary-hover">New Purchase</span>
                     </button>
-                    <button onClick={() => navigate('/inventory')} className="p-4 bg-green-50 dark:bg-green-900/20 rounded-xl text-center">
+                    <button onClick={() => navigate('/inventory')} className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl text-center">
                         <span className="block text-2xl mb-1">📦</span>
-                        <span className="font-bold text-green-700 dark:text-green-300">Inventory</span>
+                        <span className="font-bold text-blue-700 dark:text-blue-300">Inventory</span>
                     </button>
                 </div>
             </div>

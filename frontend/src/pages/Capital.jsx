@@ -89,7 +89,7 @@ const Capital = () => {
                 {transactions.map(tx => (
                     <div key={tx._id} className="bg-white dark:bg-gfg-surface-dark p-4 rounded-xl shadow-sm flex justify-between items-center border border-gray-100 dark:border-gray-800 card-3d">
                         <div className="flex items-center space-x-3">
-                            <div className={`p-2 rounded-full ${tx.type === 'CREDIT' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+                            <div className={`p-2 rounded-full ${tx.type === 'CREDIT' ? 'bg-blue-100 text-blue-600' : 'bg-red-100 text-red-600'}`}>
                                 {tx.type === 'CREDIT' ? <ArrowDownLeft size={20} /> : <ArrowUpRight size={20} />}
                             </div>
                             <div>
@@ -97,7 +97,7 @@ const Capital = () => {
                                 <p className="text-xs text-gray-500">{new Date(tx.date).toLocaleDateString()} • {tx.mode}</p>
                             </div>
                         </div>
-                        <div className={`font-bold ${tx.type === 'CREDIT' ? 'text-green-600' : 'text-red-600'}`}>
+                        <div className={`font-bold ${tx.type === 'CREDIT' ? 'text-blue-600' : 'text-red-600'}`}>
                             {tx.type === 'CREDIT' ? '+' : '-'}₹{tx.amount}
                         </div>
                     </div>

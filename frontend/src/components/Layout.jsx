@@ -34,7 +34,7 @@ const Layout = () => {
                             key={item.path}
                             to={item.path}
                             className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${location.pathname === item.path
-                                ? 'bg-green-50 text-gfg-green dark:bg-green-900/20 dark:text-green-400'
+                                ? 'bg-blue-50 text-gfg-green dark:bg-blue-900/20 dark:text-blue-400'
                                 : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                                 }`}
                         >

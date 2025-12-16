@@ -55,7 +55,7 @@ const Register = () => {
                     <input name="gstin" placeholder="GSTIN (Optional)" onChange={handleChange} className={inputClass} />
                     <textarea name="address" placeholder="Address" onChange={handleChange} className={inputClass} rows="2"></textarea>
 
-                    <button type="button" className="w-full bg-gfg-green text-white py-2 rounded-lg font-medium hover:bg-green-700 transition-colors" onClick={handleSubmit}>
+                    <button type="button" className="w-full bg-gfg-green text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors" onClick={handleSubmit}>
                         Register Shop
                     </button>
                 </form>

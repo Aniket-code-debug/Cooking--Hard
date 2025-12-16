@@ -33,7 +33,7 @@ const Suppliers = () => {
         <div>
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Suppliers</h1>
-                <button onClick={() => setShowAddForm(!showAddForm)} className="bg-gfg-green text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-green-700 transition">
+                <button onClick={() => setShowAddForm(!showAddForm)} className="bg-gfg-green text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition">
                     <Plus size={18} /> <span>Add Supplier</span>
                 </button>
             </div>
@@ -48,7 +48,7 @@ const Suppliers = () => {
                         <input placeholder="GSTIN" value={newSupplier.gstin} onChange={e => setNewSupplier({ ...newSupplier, gstin: e.target.value })} className={inputClass} />
                         <input placeholder="Address" value={newSupplier.address} onChange={e => setNewSupplier({ ...newSupplier, address: e.target.value })} className={inputClass} />
                     </div>
-                    <button type="submit" className="bg-gfg-green text-white px-4 py-2 rounded hover:bg-green-700 transition">Save Supplier</button>
+                    <button type="submit" className="bg-gfg-green text-white px-4 py-2 rounded hover:bg-blue-700 transition">Save Supplier</button>
                 </form>
             )}
 
