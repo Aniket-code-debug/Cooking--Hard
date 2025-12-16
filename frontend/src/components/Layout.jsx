@@ -21,7 +21,7 @@ const Layout = () => {
     return (
         <div className="flex h-screen bg-gray-50 dark:bg-gfg-bg-dark text-gray-900 dark:text-gray-100 transition-colors duration-200">
             {/* Sidebar */}
-            <aside className="w-64 bg-white dark:bg-gfg-green-dark shadow-md hidden md:flex flex-col">
+            <aside className="w-64 bg-white dark:bg-surface-dark shadow-md hidden md:flex flex-col">
                 <div className="p-6">
                     <h1 className="text-2xl font-bold text-primary dark:text-white drop-shadow-lg">
                         KiranaFlow
@@ -34,7 +34,7 @@ const Layout = () => {
                             key={item.path}
                             to={item.path}
                             className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${location.pathname === item.path
-                                ? 'bg-blue-50 text-gfg-green dark:bg-blue-900/20 dark:text-blue-400'
+                                ? 'bg-blue-50 text-gfg-green dark:bg-gray-700/50 dark:text-cyan-400'
                                 : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                                 }`}
                         >
