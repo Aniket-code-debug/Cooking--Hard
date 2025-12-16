@@ -54,7 +54,7 @@ const Suppliers = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {suppliers.map(s => (
-                    <div key={s._id} className="bg-white dark:bg-gfg-surface-dark p-5 rounded-lg shadow-sm border dark:border-gray-700 hover:shadow-md transition-shadow">
+                    <div key={s._id} className="bg-white dark:bg-gfg-surface-dark p-5 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow card-3d">
                         <h3 className="font-bold text-lg text-gray-800 dark:text-white">{s.name}</h3>
                         <div className="mt-3 space-y-2 text-sm text-gray-600 dark:text-gray-300">
                             <div className="flex items-center space-x-2"><Phone size={16} /> <span>{s.phone}</span></div>

@@ -87,7 +87,7 @@ const Capital = () => {
             <div className="space-y-3">
                 <h3 className="font-bold text-gray-700 dark:text-gray-300">Recent Transactions</h3>
                 {transactions.map(tx => (
-                    <div key={tx._id} className="bg-white dark:bg-gfg-surface-dark p-4 rounded-xl shadow-sm flex justify-between items-center border dark:border-gray-800">
+                    <div key={tx._id} className="bg-white dark:bg-gfg-surface-dark p-4 rounded-xl shadow-sm flex justify-between items-center border border-gray-100 dark:border-gray-800 card-3d">
                         <div className="flex items-center space-x-3">
                             <div className={`p-2 rounded-full ${tx.type === 'CREDIT' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
                                 {tx.type === 'CREDIT' ? <ArrowDownLeft size={20} /> : <ArrowUpRight size={20} />}

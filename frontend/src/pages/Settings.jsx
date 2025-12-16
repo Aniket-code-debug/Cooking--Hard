@@ -20,7 +20,7 @@ const Settings = () => {
 
             <div className="space-y-6">
                 {/* Business Info Section */}
-                <div className="bg-white dark:bg-gfg-surface-dark p-6 rounded-xl shadow border dark:border-gray-700">
+                <div className="bg-white dark:bg-gfg-surface-dark p-6 rounded-xl shadow border border-gray-100 dark:border-gray-700 card-3d">
                     <h2 className="text-xl font-bold mb-4 text-gfg-green flex items-center space-x-2">
                         <User size={20} />
                         <span>Business Information</span>
@@ -42,7 +42,7 @@ const Settings = () => {
                 </div>
 
                 {/* Staff Section (Placeholder) */}
-                <div className="bg-white dark:bg-gfg-surface-dark p-6 rounded-xl shadow border dark:border-gray-700">
+                <div className="bg-white dark:bg-gfg-surface-dark p-6 rounded-xl shadow border border-gray-100 dark:border-gray-700 card-3d">
                     <h2 className="text-xl font-bold mb-4 text-gfg-green">Staff Management</h2>
                     <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">Manage access for your employees.</p>
 

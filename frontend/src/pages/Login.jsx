@@ -2,11 +2,14 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import { useTheme } from '../context/ThemeContext';
+import { Sun, Moon } from 'lucide-react';
 
 // ✅ USE ENV VARIABLE
 const API_URL = import.meta.env.VITE_API_URL;
 
 const Login = () => {
+    const { isDarkMode, toggleTheme } = useTheme();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { login } = useAuth();
@@ -31,7 +34,16 @@ const Login = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gfg-bg-dark transition-colors duration-200">
-            <div className="max-w-md w-full bg-white dark:bg-gfg-surface-dark p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+            <div className="max-w-md w-full bg-white dark:bg-gfg-surface-dark p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 relative">
+                {/* Dark Mode Toggle */}
+                <button
+                    onClick={toggleTheme}
+                    className="absolute top-4 right-4 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors"
+                    aria-label="Toggle dark mode"
+                >
+                    {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+                </button>
+
                 <h2 className="text-3xl font-bold text-center text-gfg-green mb-2">KiranaFlow</h2>
                 <p className="text-center text-gray-500 dark:text-gray-400 mb-8">Sign in to manage your shop</p>
 

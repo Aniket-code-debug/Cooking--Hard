@@ -87,7 +87,7 @@ const Inventory = () => {
 
             <div className="space-y-3">
                 {filtered.map(p => (
-                    <div key={p._id} className="bg-white dark:bg-gfg-surface-dark p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 flex justify-between items-center">
+                    <div key={p._id} className="bg-white dark:bg-gfg-surface-dark p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 flex justify-between items-center card-3d">
                         <div className="flex-1">
                             <h3 className="font-bold text-gray-900 dark:text-white text-lg">{p.name}</h3>
                             <p className="text-sm text-gray-500 dark:text-gray-400">{p.totalStock !== undefined ? `${p.totalStock} ${p.unit}` : 'Stock info unavailable'}</p>
