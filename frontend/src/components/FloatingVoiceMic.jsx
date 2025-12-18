@@ -24,11 +24,11 @@ const FloatingVoiceMic = () => {
     };
 
     // Auto-submit when recording stops and we have transcript
-    useState(() => {
+    useEffect(() => {
         if (!isRecording && transcript && !isProcessing) {
             handleSubmitVoiceSale();
         }
-    }, [isRecording, transcript]);
+    }, [isRecording, transcript, isProcessing]);
 
     const handleSubmitVoiceSale = async () => {
         if (!transcript) return;
