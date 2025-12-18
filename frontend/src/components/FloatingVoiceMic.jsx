@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Mic, MicOff, Loader } from 'lucide-react';
 import { useVoiceRecorder } from '../hooks/useVoiceRecorder';
 import axios from 'axios';
@@ -64,7 +64,15 @@ const FloatingVoiceMic = () => {
     };
 
     if (!isSupported) {
-        return null; // Don't show button if not supported
+        return (
+            <div className="fixed bottom-24 right-6 z-50">
+                <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded-lg shadow-lg max-w-xs">
+                    <p className="text-xs text-red-600 dark:text-red-400">
+                        Voice feature not supported in this browser. Use Chrome/Edge.
+                    </p>
+                </div>
+            </div>
+        );
     }
 
     return (
@@ -74,8 +82,8 @@ const FloatingVoiceMic = () => {
                 onClick={handleMicClick}
                 disabled={isProcessing}
                 className={`fixed bottom-24 right-6 z-50 p-4 rounded-full shadow-lg transition-all duration-300 ${isRecording
-                        ? 'bg-red-500 hover:bg-red-600 animate-pulse'
-                        : 'bg-gfg-green hover:bg-blue-700'
+                    ? 'bg-red-500 hover:bg-red-600 animate-pulse'
+                    : 'bg-gfg-green hover:bg-blue-700'
                     } text-white disabled:opacity-50`}
                 aria-label={isRecording ? 'Stop recording' : 'Start voice sale'}
             >
