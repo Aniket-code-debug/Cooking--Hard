@@ -114,7 +114,7 @@ const Inventory = () => {
                 ))}
             </div>
 
-            <button className="fixed bottom-20 right-4 bg-gfg-green text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition">
+            <button className="fixed bottom-24 right-24 bg-gfg-green text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition z-40">
                 <Plus size={24} />
             </button>
 
