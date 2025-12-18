@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Plus, Trash, Check } from 'lucide-react';
+import FloatingVoiceMic from '../components/FloatingVoiceMic';
 
 const Purchases = () => {
     const API_URL = import.meta.env.VITE_API_URL;
@@ -122,6 +123,8 @@ const Purchases = () => {
                     </div>
                 </div>
             )}
+
+            <FloatingVoiceMic />
         </div>
     );
 };

@@ -21,6 +21,7 @@ const supplierRoutes = require('./routes/supplierRoutes');
 const purchaseRoutes = require('./routes/purchaseRoutes');
 const reportsRoutes = require('./routes/reportsRoutes');
 const capitalRoutes = require('./routes/capitalRoutes');
+const voiceSaleRoutes = require('./routes/voiceSaleRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/inventory', inventoryRoutes);
@@ -28,6 +29,7 @@ app.use('/api/suppliers', supplierRoutes);
 app.use('/api/purchases', purchaseRoutes);
 app.use('/api/reports', reportsRoutes);
 app.use('/api/capital', capitalRoutes);
+app.use('/api/voice-sales', voiceSaleRoutes);
 
 // Database Connection
 if (!process.env.MONGO_URI) {

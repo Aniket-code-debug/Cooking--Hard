@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, ShoppingCart, Users, FileBarChart, LogOut, Sun, Moon, Settings as SettingsIcon } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingCart, Users, FileBarChart, LogOut, Sun, Moon, Settings as SettingsIcon, Mic } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import BottomNav from './BottomNav';
@@ -14,6 +14,7 @@ const Layout = () => {
         { label: 'Inventory', path: '/inventory', icon: <Package size={20} /> },
         { label: 'Purchases', path: '/purchases', icon: <ShoppingCart size={20} /> },
         { label: 'Suppliers', path: '/suppliers', icon: <Users size={20} /> },
+        { label: 'Voice Sales', path: '/voice-sales', icon: <Mic size={20} /> },
         { label: 'Reports', path: '/reports', icon: <FileBarChart size={20} /> },
         { label: 'Settings', path: '/settings', icon: <SettingsIcon size={20} /> },
     ];

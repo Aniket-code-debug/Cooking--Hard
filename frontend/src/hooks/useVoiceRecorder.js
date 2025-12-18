@@ -1,0 +1,96 @@
+import { useState, useCallback, useRef, useEffect } from 'react';
+
+/**
+ * Custom hook for voice recording using Web Speech API
+ * @returns {Object} Voice recorder state and methods
+ */
+export const useVoiceRecorder = () => {
+    const [isRecording, setIsRecording] = useState(false);
+    const [transcript, setTranscript] = useState('');
+    const [isSupported, setIsSupported] = useState(true);
+    const [error, setError] = useState(null);
+
+    const recognitionRef = useRef(null);
+
+    useEffect(() => {
+        // Check if browser supports Web Speech API
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition) {
+            setIsSupported(false);
+            setError('Speech recognition not supported in this browser. Please use Chrome or Edge.');
+            return;
+        }
+
+        // Initialize speech recognition
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'hi-IN'; // Hindi India - also recognizes Hinglish
+
+        recognition.onresult = (event) => {
+            const speechResult = event.results[0][0].transcript;
+            setTranscript(speechResult);
+        };
+
+        recognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+            setError(`Recording error: ${event.error}`);
+            setIsRecording(false);
+        };
+
+        recognition.onend = () => {
+            setIsRecording(false);
+        };
+
+        recognitionRef.current = recognition;
+
+        return () => {
+            if (recognitionRef.current) {
+                recognitionRef.current.stop();
+            }
+        };
+    }, []);
+
+    const startRecording = useCallback(() => {
+        if (!isSupported) {
+            setError('Speech recognition not supported');
+            return;
+        }
+
+        setError(null);
+        setTranscript('');
+
+        try {
+            recognitionRef.current?.start();
+            setIsRecording(true);
+        } catch (err) {
+            console.error('Failed to start recording:', err);
+            setError('Failed to start recording. Please try again.');
+        }
+    }, [isSupported]);
+
+    const stopRecording = useCallback(() => {
+        try {
+            recognitionRef.current?.stop();
+            setIsRecording(false);
+        } catch (err) {
+            console.error('Failed to stop recording:', err);
+        }
+    }, []);
+
+    const reset = useCallback(() => {
+        setTranscript('');
+        setError(null);
+    }, []);
+
+    return {
+        isRecording,
+        transcript,
+        isSupported,
+        error,
+        startRecording,
+        stopRecording,
+        reset
+    };
+};

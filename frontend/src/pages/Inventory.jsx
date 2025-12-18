@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Plus, Minus, Search, Filter } from 'lucide-react';
+import FloatingVoiceMic from '../components/FloatingVoiceMic';
 
 const Inventory = () => {
     const API_URL = import.meta.env.VITE_API_URL;
@@ -42,7 +43,7 @@ const Inventory = () => {
             // I really should utilize `getAlerts` aggregation logic in `getProducts`.
             // Okay, I will update Backend `inventoryController.js` to return stock in `getProducts`!
             // That was part of "Optimize api/inventory" task.
-            const res = await axios.get(`${API_URL}/api/inventory/products`);
+            const res = await axios.get(`${API_URL} /api/inventory / products`);
             setProducts(res.data);
 
             // Temporary: fetch batches for all? Or just render products and allow click to expand?
@@ -54,7 +55,7 @@ const Inventory = () => {
 
     const handleQuickAdjust = async (productId, change) => {
         try {
-            await axios.post(`${API_URL}/api/inventory/quick-adjust`, { productId, change });
+            await axios.post(`${API_URL} /api/inventory / quick - adjust`, { productId, change });
             // Optimistic update
             setProducts(prev => prev.map(p => {
                 if (p._id === productId) {
@@ -90,7 +91,7 @@ const Inventory = () => {
                     <div key={p._id} className="bg-white dark:bg-gfg-surface-dark p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 flex justify-between items-center card-3d">
                         <div className="flex-1">
                             <h3 className="font-bold text-gray-900 dark:text-white text-lg">{p.name}</h3>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">{p.totalStock !== undefined ? `${p.totalStock} ${p.unit}` : 'Stock info unavailable'}</p>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">{p.totalStock !== undefined ? `${p.totalStock} ${p.unit} ` : 'Stock info unavailable'}</p>
                             {p.totalStock <= p.minStockLevel && <span className="text-xs text-red-500 font-bold bg-red-50 px-1 rounded">LOW</span>}
                         </div>
 
@@ -116,6 +117,8 @@ const Inventory = () => {
             <button className="fixed bottom-20 right-4 bg-gfg-green text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition">
                 <Plus size={24} />
             </button>
+
+            <FloatingVoiceMic />
         </div>
     );
 };

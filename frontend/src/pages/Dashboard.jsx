@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { AlertCircle, Clock, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import FloatingVoiceMic from '../components/FloatingVoiceMic';
 
 const Dashboard = () => {
     const API_URL = import.meta.env.VITE_API_URL;
@@ -103,6 +104,8 @@ const Dashboard = () => {
                     </button>
                 </div>
             </div>
+
+            <FloatingVoiceMic />
         </div>
     );
 };

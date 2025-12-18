@@ -11,6 +11,7 @@ import Purchases from './pages/Purchases';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 import Capital from './pages/Capital';
+import VoiceSales from './pages/VoiceSales';
 
 const PrivateRoute = ({ children }) => {
   const { token } = useAuth();
@@ -30,6 +31,7 @@ function App() {
               <Route path="inventory" element={<Inventory />} />
               <Route path="suppliers" element={<Suppliers />} />
               <Route path="purchases" element={<Purchases />} />
+              <Route path="voice-sales" element={<VoiceSales />} />
               <Route path="reports" element={<Reports />} />
               <Route path="capital" element={<Capital />} />
               <Route path="settings" element={<Settings />} />
