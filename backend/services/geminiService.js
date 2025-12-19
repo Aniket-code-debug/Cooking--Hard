@@ -1,8 +1,5 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
-// Initialize Gemini
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-
 /**
  * Parse voice sale using Gemini AI
  * @param {string} voiceText - Transcribed voice text
@@ -22,6 +19,9 @@ async function parseVoiceSaleWithAI(voiceText, inventory) {
             console.warn('⚠️ GEMINI_API_KEY not configured, falling back to basic matching');
             return fallbackMatching(voiceText, inventory);
         }
+
+        // Initialize Gemini here (after env is loaded)
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
         // Prepare inventory list for AI
         const inventoryList = inventory.map(p => ({
