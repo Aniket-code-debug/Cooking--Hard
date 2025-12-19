@@ -71,7 +71,7 @@ const Landing = () => {
                     </div>
 
                     <p className="mt-6 text-sm text-gray-500 dark:text-gray-400">
-                        ✨ No credit card required • 🚀 Setup in 2 minutes • 💯 100% Free Forever
+                        ✨ No credit card required • 🚀 Setup in 2 minutes • 📱 Works on any device
                     </p>
                 </div>
             </section>
