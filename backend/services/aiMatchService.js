@@ -64,6 +64,16 @@ function fuzzyMatchProducts(voiceText, inventory) {
         'pav': 'bread'
     };
 
+    // Translate Hindi/Hinglish to English first
+    let translatedText = text;
+    for (const [hindi, english] of Object.entries(translations)) {
+        // Replace all occurrences of Hindi word with English equivalent
+        translatedText = translatedText.replace(new RegExp(hindi, 'gi'), english);
+    }
+
+    console.log('📝 Original text:', text);
+    console.log('🔄 Translated text:', translatedText);
+
     // Extract quantity patterns
     const quantityPatterns = [
         /(\d+)\s*(kilo|kg|किलो)/gi,
@@ -72,35 +82,30 @@ function fuzzyMatchProducts(voiceText, inventory) {
         /ek|एक/gi // one in Hindi
     ];
 
-    // Simple parsing logic (placeholder for AI)
+    // Match products against translated text
     inventory.forEach(product => {
         const productNameLower = product.name.toLowerCase();
+        const productWords = productNameLower.split(/\s+/);
 
-        // Check if product name appears in voice text
-        if (text.includes(productNameLower)) {
+        // Check if any significant word from product name appears in translated text
+        const matchFound = productWords.some(word => {
+            if (word.length >= 3) { // Only check words with 3+ chars
+                return translatedText.includes(word);
+            }
+            return false;
+        });
+
+        if (matchFound) {
+            const quantity = extractQuantity(translatedText, productNameLower);
             items.push({
-                matchedItemName: product.name,
-                spokenName: productNameLower,
-                quantity: extractQuantity(text, productNameLower),
+                matchedItemName: product.name, // Use actual product name from inventory
+                spokenName: text.substring(0, 30), // Show what was spoken
+                quantity: quantity,
                 unit: product.unit || 'piece',
                 confidence: 0.9,
                 productId: product._id
             });
-        } else {
-            // Check Hindi translations
-            for (const [hindi, english] of Object.entries(translations)) {
-                if (text.includes(hindi) && productNameLower.includes(english)) {
-                    items.push({
-                        matchedItemName: product.name,
-                        spokenName: hindi,
-                        quantity: extractQuantity(text, hindi),
-                        unit: product.unit || 'piece',
-                        confidence: 0.85,
-                        productId: product._id
-                    });
-                    break;
-                }
-            }
+            console.log(`✅ Matched: "${text}" → "${product.name}" (${quantity} ${product.unit})`);
         }
     });
 
