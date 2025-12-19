@@ -10,6 +10,12 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
  * @returns {Object} Matched items with confidence scores
  */
 async function parseVoiceSaleWithAI(voiceText, inventory) {
+    console.log('🔍 parseVoiceSaleWithAI called');
+    console.log('📝 Voice text:', voiceText);
+    console.log('📦 Inventory count:', inventory.length);
+    console.log('🔑 API key exists:', !!process.env.GEMINI_API_KEY);
+    console.log('🔑 API key first 10 chars:', process.env.GEMINI_API_KEY?.substring(0, 10));
+
     try {
         // Check if API key is configured
         if (!process.env.GEMINI_API_KEY) {
@@ -97,6 +103,7 @@ Respond ONLY with valid JSON (no markdown):
  * Fallback to basic matching if AI fails
  */
 function fallbackMatching(voiceText, inventory) {
+    console.log('⚙️ Using fallback matching');
     const text = voiceText.toLowerCase();
     const items = [];
 
