@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, ShoppingCart, Users, FileBarChart, LogOut, Sun, Moon, Settings as SettingsIcon, Mic } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingCart, Users, FileBarChart, LogOut, Sun, Moon, Settings as SettingsIcon, Mic, Wallet, TrendingUp } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import BottomNav from './BottomNav';
@@ -11,6 +11,8 @@ const Layout = () => {
 
     const navItems = [
         { label: 'Dashboard', path: '/', icon: <LayoutDashboard size={20} /> },
+        { label: 'Account Overview', path: '/account-overview', icon: <Wallet size={20} /> },
+        { label: 'Cash Flow', path: '/cashflow', icon: <TrendingUp size={20} /> },
         { label: 'Inventory', path: '/inventory', icon: <Package size={20} /> },
         { label: 'Purchases', path: '/purchases', icon: <ShoppingCart size={20} /> },
         { label: 'Suppliers', path: '/suppliers', icon: <Users size={20} /> },
