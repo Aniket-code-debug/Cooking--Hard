@@ -41,11 +41,19 @@ const FloatingVoiceMic = () => {
 
         try {
             const token = localStorage.getItem('token');
+            console.log('📤 Submitting voice sale, token exists:', !!token);
+
+            if (!token) {
+                throw new Error('No authentication token found. Please login again.');
+            }
+
             const response = await axios.post(
                 `${API_URL}/api/voice-sales/parse`,
                 { voiceText: transcript },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
+
+            console.log('✅ Voice sale saved:', response.data);
 
             // Show success toast
             setToastMessage('✓ Voice sale recorded for review');
@@ -58,10 +66,21 @@ const FloatingVoiceMic = () => {
             }, 3000);
 
         } catch (err) {
-            console.error('Voice sale error:', err);
-            setToastMessage('❌ Failed to record sale. Try again.');
+            console.error('❌ Voice sale error:', err);
+            console.error('Error details:', err.response?.data || err.message);
+
+            let errorMessage = '❌ Failed to record sale. ';
+            if (err.response?.status === 401) {
+                errorMessage += 'Please login again.';
+            } else if (err.message) {
+                errorMessage += err.message;
+            } else {
+                errorMessage += 'Try again.';
+            }
+
+            setToastMessage(errorMessage);
             setShowToast(true);
-            setTimeout(() => setShowToast(false), 3000);
+            setTimeout(() => setShowToast(false), 5000);
         } finally {
             setIsProcessing(false);
         }
