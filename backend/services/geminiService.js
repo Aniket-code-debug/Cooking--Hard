@@ -1,10 +1,12 @@
 /**
- * Gemini AI Service using direct REST API (v1)
- * Using v1 because v1beta no longer supports gemini-pro models
+ * Gemini AI Service using direct REST API (v1beta)
+ * Using v1beta because it supports gemini-2.5-flash model
  */
 
+const fetch = require('node-fetch');
+
 /**
- * Call Gemini API directly using REST (v1 endpoint)
+ * Call Gemini API directly using REST (v1beta endpoint)
  */
 async function callGeminiAPI(prompt) {
     const apiKey = process.env.GEMINI_API_KEY;
