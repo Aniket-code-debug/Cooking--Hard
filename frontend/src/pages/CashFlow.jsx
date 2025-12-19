@@ -52,13 +52,13 @@ const CashFlow = () => {
             </div>
 
             {/* Balance Card */}
-            <div className="bg-gradient-to-r from-green-500 to-teal-500 p-8 rounded-xl text-white mb-6 shadow-lg">
+            <div className="bg-gradient-to-r from-green-600 to-teal-600 dark:from-green-700 dark:to-teal-700 p-8 rounded-xl text-white mb-6 shadow-lg">
                 <p className="text-sm font-medium opacity-90 mb-1">Current Cash Balance</p>
                 <p className="text-5xl font-bold">₹{currentBalance.toLocaleString('en-IN')}</p>
             </div>
 
             {/* Filters */}
-            <div className="bg-white dark:bg-gfg-surface-dark p-4 rounded-xl mb-4 flex items-center justify-between">
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-xl mb-4 flex items-center justify-between shadow-sm border border-gray-200 dark:border-gray-700">
                 <div className="flex items-center space-x-2">
                     <Filter className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                     <span className="text-sm font-medium dark:text-white">Filter:</span>
@@ -68,8 +68,8 @@ const CashFlow = () => {
                                 key={type}
                                 onClick={() => setFilter(type)}
                                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filter === type
-                                        ? 'bg-gfg-green text-white'
-                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                    ? 'bg-gfg-green text-white'
+                                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                                     }`}
                             >
                                 {type === 'all' ? 'All' : type}
