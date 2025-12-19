@@ -111,17 +111,38 @@ function fuzzyMatchProducts(voiceText, inventory) {
  * Extract quantity from text near product mention
  */
 function extractQuantity(text, productName) {
-    // Look for numbers before the product name
-    const beforeProduct = text.substring(0, text.indexOf(productName));
-    const numbers = beforeProduct.match(/\d+/g);
+    // Look for numbers in the entire text (more flexible)
+    const allNumbers = text.match(/\d+/g);
 
-    if (numbers && numbers.length > 0) {
-        return parseInt(numbers[numbers.length - 1]);
+    if (allNumbers && allNumbers.length > 0) {
+        // Try to find number closest to product name
+        const productIndex = text.indexOf(productName);
+        const beforeProduct = text.substring(0, productIndex);
+        const numbersBeforeProduct = beforeProduct.match(/\d+/g);
+
+        if (numbersBeforeProduct && numbersBeforeProduct.length > 0) {
+            // Return the last number before the product (most likely the quantity)
+            return parseInt(numbersBeforeProduct[numbersBeforeProduct.length - 1]);
+        }
+
+        // If no number before, take first number from anywhere
+        return parseInt(allNumbers[0]);
     }
 
-    // Check for "ek" or "एक" (one in Hindi)
-    if (beforeProduct.includes('ek') || beforeProduct.includes('एक')) {
-        return 1;
+    // Check for Hindi number words
+    const hindiNumbers = {
+        'ek': 1, 'एक': 1,
+        'do': 2, 'दो': 2,
+        'teen': 3, 'तीन': 3,
+        'char': 4, 'चार': 4,
+        'panch': 5, 'पांच': 5,
+        'paanch': 5
+    };
+
+    for (const [word, num] of Object.entries(hindiNumbers)) {
+        if (text.includes(word)) {
+            return num;
+        }
     }
 
     // Default to 1

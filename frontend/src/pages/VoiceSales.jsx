@@ -144,16 +144,30 @@ const VoiceSales = () => {
 
                             {/* Items */}
                             <div className="space-y-3 mb-4">
-                                {sale.items.map((item, idx) => (
+                                {(editingId === sale._id ? editedItems : sale.items).map((item, idx) => (
                                     <div key={idx} className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg">
                                         <div className="flex justify-between items-center">
                                             <div className="flex-1">
                                                 <h4 className="font-semibold text-gray-900 dark:text-white">
                                                     📦 {item.matchedItemName}
                                                 </h4>
-                                                <p className="text-sm text-gray-600 dark:text-gray-400">
-                                                    Qty: {item.quantity} {item.unit} • Spoken: "{item.spokenName}"
-                                                </p>
+                                                {editingId === sale._id ? (
+                                                    <div className="flex items-center gap-2 mt-2">
+                                                        <label className="text-sm text-gray-600 dark:text-gray-400">Qty:</label>
+                                                        <input
+                                                            type="number"
+                                                            min="1"
+                                                            value={item.quantity}
+                                                            onChange={(e) => updateItemQuantity(idx, e.target.value)}
+                                                            className="w-20 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                                        />
+                                                        <span className="text-sm text-gray-600 dark:text-gray-400">{item.unit}</span>
+                                                    </div>
+                                                ) : (
+                                                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                                                        Qty: {item.quantity} {item.unit} • Spoken: "{item.spokenName}"
+                                                    </p>
+                                                )}
                                             </div>
                                             <div>
                                                 {getConfidenceBadge(item.confidence)}
@@ -165,20 +179,47 @@ const VoiceSales = () => {
 
                             {/* Actions */}
                             <div className="flex gap-2">
-                                <button
-                                    onClick={() => handleReject(sale._id)}
-                                    className="flex-1 py-2 border border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition flex items-center justify-center gap-2"
-                                >
-                                    <X size={18} />
-                                    Reject
-                                </button>
-                                <button
-                                    onClick={() => handleConfirm(sale._id)}
-                                    className="flex-1 py-2 bg-gfg-green text-white rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2"
-                                >
-                                    <Check size={18} />
-                                    Confirm Sale
-                                </button>
+                                {editingId === sale._id ? (
+                                    <>
+                                        <button
+                                            onClick={cancelEditing}
+                                            className="flex-1 py-2 border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            onClick={() => saveEdits(sale._id)}
+                                            className="flex-1 py-2 bg-gfg-green text-white rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2"
+                                        >
+                                            <Check size={18} />
+                                            Save Changes
+                                        </button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <button
+                                            onClick={() => handleReject(sale._id)}
+                                            className="px-3 py-2 border border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition flex items-center justify-center gap-2"
+                                        >
+                                            <X size={18} />
+                                            Reject
+                                        </button>
+                                        <button
+                                            onClick={() => startEditing(sale)}
+                                            className="px-3 py-2 border border-blue-300 dark:border-blue-800 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition flex items-center justify-center gap-2"
+                                        >
+                                            <Edit2 size={18} />
+                                            Edit
+                                        </button>
+                                        <button
+                                            onClick={() => handleConfirm(sale._id)}
+                                            className="flex-1 py-2 bg-gfg-green text-white rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2"
+                                        >
+                                            <Check size={18} />
+                                            Confirm Sale
+                                        </button>
+                                    </>
+                                )}
                             </div>
                         </div>
                     ))}
