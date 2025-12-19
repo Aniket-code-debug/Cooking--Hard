@@ -147,6 +147,41 @@ exports.confirmSale = async (req, res) => {
             }
         }
 
+        // INTEGRATION HOOK: Create cash flow transaction (SALE - cash IN)
+        const Transaction = require('../models/Transaction');
+        const { calculateNewBalance } = require('../utils/balanceCalculator');
+
+        // Calculate total amount (assuming each item has price from product)
+        let totalAmount = 0;
+        const Product = require('../models/Product');
+
+        for (const item of itemsToDeduct) {
+            if (item.productId) {
+                const product = await Product.findById(item.productId);
+                if (product && product.sellingPrice) {
+                    totalAmount += product.sellingPrice * item.quantity;
+                }
+            }
+        }
+
+        if (totalAmount > 0) {
+            const newBalance = await calculateNewBalance(req.user._id, totalAmount, 'IN');
+
+            await Transaction.create({
+                user: req.user._id,
+                type: 'SALE',
+                direction: 'IN',
+                amount: totalAmount,
+                description: `Voice Sale - "${voiceSale.voiceText}"`,
+                referenceId: voiceSale._id,
+                referenceModel: 'VoiceSale',
+                balance: newBalance,
+                isSystemGenerated: true,
+                entrySource: 'VOICE_AI',
+                paymentMode: 'CASH' // Default to cash, can be updated later
+            });
+        }
+
         res.status(200).json({
             success: true,
             voiceSale,
