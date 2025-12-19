@@ -43,7 +43,9 @@ const Inventory = () => {
             // I really should utilize `getAlerts` aggregation logic in `getProducts`.
             // Okay, I will update Backend `inventoryController.js` to return stock in `getProducts`!
             // That was part of "Optimize api/inventory" task.
-            const res = await axios.get(`${API_URL} /api/inventory / products`);
+            const res = await axios.get(`${API_URL}/api/inventory/products`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            });
             setProducts(res.data);
 
             // Temporary: fetch batches for all? Or just render products and allow click to expand?
