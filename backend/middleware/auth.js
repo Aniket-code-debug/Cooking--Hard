@@ -13,15 +13,23 @@ const auth = async (req, res, next) => {
         // Verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
 
-        // Find user by id
-        const user = await User.findById(decoded.userId).select('-password');
+        console.log('🔍 Decoded token:', decoded);
+
+        // Find user by id (token uses 'id', not 'userId')
+        const user = await User.findById(decoded.id).select('-password');
 
         if (!user) {
+            console.error('❌ User not found for id:', decoded.id);
             return res.status(401).json({ message: 'User not found' });
         }
 
-        // Attach user to request
-        req.user = user;
+        console.log('✅ User authenticated:', user.email);
+
+        // Attach user to request (with both user object and id for compatibility)
+        req.user = {
+            ...user.toObject(),
+            id: user._id.toString()
+        };
         next();
 
     } catch (error) {
