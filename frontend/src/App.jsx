@@ -35,17 +35,17 @@ function App() {
             <Route path="/" element={<PublicRoute><Landing /></PublicRoute>} />
             <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
             <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
-            <Route path="/dashboard" element={<PrivateRoute><Layout /></PrivateRoute>}>
-              <Route index element={<Dashboard />} />
-              <Route path="inventory" element={<Inventory />} />
-              <Route path="suppliers" element={<Suppliers />} />
-              <Route path="purchases" element={<Purchases />} />
-              <Route path="voice-sales" element={<VoiceSales />} />
-              <Route path="reports" element={<Reports />} />
-              <Route path="capital" element={<Capital />} />
-              <Route path="account-overview" element={<AccountOverview />} />
-              <Route path="cashflow" element={<CashFlow />} />
-              <Route path="settings" element={<Settings />} />
+            <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/inventory" element={<Inventory />} />
+              <Route path="/suppliers" element={<Suppliers />} />
+              <Route path="/purchases" element={<Purchases />} />
+              <Route path="/voice-sales" element={<VoiceSales />} />
+              <Route path="/reports" element={<Reports />} />
+              <Route path="/capital" element={<Capital />} />
+              <Route path="/account-overview" element={<AccountOverview />} />
+              <Route path="/cashflow" element={<CashFlow />} />
+              <Route path="/settings" element={<Settings />} />
             </Route>
           </Routes>
         </ThemeProvider>

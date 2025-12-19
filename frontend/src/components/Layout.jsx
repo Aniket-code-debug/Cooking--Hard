@@ -10,7 +10,7 @@ const Layout = () => {
     const location = useLocation();
 
     const navItems = [
-        { label: 'Dashboard', path: '/', icon: <LayoutDashboard size={20} /> },
+        { label: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard size={20} /> },
         { label: 'Account Overview', path: '/account-overview', icon: <Wallet size={20} /> },
         { label: 'Cash Flow', path: '/cashflow', icon: <TrendingUp size={20} /> },
         { label: 'Inventory', path: '/inventory', icon: <Package size={20} /> },
