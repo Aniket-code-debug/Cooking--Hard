@@ -18,8 +18,12 @@ exports.parseVoiceSale = async (req, res) => {
             return res.status(400).json({ message: 'No inventory items found. Add products first.' });
         }
 
+        console.log('🎯 About to call Gemini with:', { voiceText, inventoryCount: inventory.length });
+
         // Match items using Gemini AI
         const matchResult = await parseVoiceSaleWithAI(voiceText, inventory);
+
+        console.log('📊 Gemini returned:', { itemsCount: matchResult.items.length, confidence: matchResult.overallConfidence });
 
         // Create voice sale record
         const voiceSale = new VoiceSale({
