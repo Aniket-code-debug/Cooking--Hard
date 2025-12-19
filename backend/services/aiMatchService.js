@@ -33,15 +33,35 @@ function fuzzyMatchProducts(voiceText, inventory) {
     const items = [];
     const text = voiceText.toLowerCase();
 
-    // Common Hindi/English mappings
+    // Common Hindi/English mappings for Kirana products
     const translations = {
+        // Devanagari script
+        'मैगी': 'maggi',
+        'नूडल्स': 'noodles',
+        'चीनी': 'sugar',
+        'आटा': 'flour',
+        'चावल': 'rice',
+        'दाल': 'dal',
+        'नमक': 'salt',
+        'तेल': 'oil',
+        // Romanized Hindi (Hinglish)
         'cheeni': 'sugar',
         'chawal': 'rice',
         'atta': 'flour',
+        'aata': 'flour',
         'tel': 'oil',
         'namak': 'salt',
-        'daal': 'lentil',
-        'maggie': 'noodles'
+        'daal': 'dal',
+        'dal': 'lentil',
+        'maggie': 'maggi',
+        'noodles': 'noodles',
+        'biscuit': 'biscuit',
+        'chai': 'tea',
+        'coffee': 'coffee',
+        'milk': 'milk',
+        'doodh': 'milk',
+        'bread': 'bread',
+        'pav': 'bread'
     };
 
     // Extract quantity patterns

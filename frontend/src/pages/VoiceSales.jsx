@@ -33,17 +33,25 @@ const VoiceSales = () => {
     const handleConfirm = async (id) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post(`${API_URL}/api/voice-sales/${id}/confirm`, {}, {
+            const response = await axios.post(`${API_URL}/api/voice-sales/${id}/confirm`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
             // Remove from list
             setPendingSales(prev => prev.filter(sale => sale._id !== id));
 
-            alert('✓ Sale confirmed successfully');
+            // Show success message
+            alert(`✅ ${response.data.message}\n\n📦 Inventory has been updated!\nGo to Inventory page to see changes.`);
+
+            // Navigate to inventory page after short delay
+            setTimeout(() => {
+                navigate('/inventory');
+            }, 1500);
+
         } catch (err) {
             console.error('Confirm error:', err);
-            alert('Failed to confirm sale');
+            const errorMsg = err.response?.data?.message || 'Failed to confirm sale';
+            alert(`❌ ${errorMsg}`);
         }
     };
 

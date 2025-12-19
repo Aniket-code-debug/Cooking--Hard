@@ -111,13 +111,42 @@ exports.confirmSale = async (req, res) => {
 
         await voiceSale.save();
 
-        // TODO: Update inventory stock (reduce quantities)
-        // This would be implemented similar to how Purchases update inventory
+        // Deduct inventory stock using FEFO (First Expiry, First Out)
+        const Batch = require('../models/Batch');
+        const itemsToDeduct = confirmedItems || voiceSale.confirmedItems;
+
+        for (const item of itemsToDeduct) {
+            if (!item.productId || !item.quantity) continue;
+
+            // Find batches for this product, sorted by expiry (oldest first)
+            const batches = await Batch.find({
+                product: item.productId,
+                quantity: { $gt: 0 }
+            }).sort({ expiryDate: 1 });
+
+            let remainingToDeduct = item.quantity;
+
+            for (const batch of batches) {
+                if (remainingToDeduct <= 0) break;
+
+                const deductAmount = Math.min(batch.quantity, remainingToDeduct);
+                batch.quantity -= deductAmount;
+                await batch.save();
+
+                remainingToDeduct -= deductAmount;
+
+                console.log(`✅ Deducted ${deductAmount} from batch ${batch._id}, remaining: ${batch.quantity}`);
+            }
+
+            if (remainingToDeduct > 0) {
+                console.warn(`⚠️ Insufficient stock for ${item.productId}, couldn't deduct ${remainingToDeduct}`);
+            }
+        }
 
         res.status(200).json({
             success: true,
             voiceSale,
-            message: 'Voice sale confirmed successfully'
+            message: 'Voice sale confirmed and inventory updated successfully'
         });
 
     } catch (error) {
