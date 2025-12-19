@@ -1,8 +1,6 @@
 const Transaction = require('../models/Transaction');
 const SupplierTransaction = require('../models/SupplierTransaction');
 const Supplier = require('../models/Supplier');
-const Sale = require('../models/Sale');
-const Purchase = require('../models/Purchase');
 const { calculateNewBalance, getCurrentCashBalance } = require('../utils/balanceCalculator');
 
 // Get global cash flow ledger
