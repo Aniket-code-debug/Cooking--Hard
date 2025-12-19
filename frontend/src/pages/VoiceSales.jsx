@@ -72,6 +72,43 @@ const VoiceSales = () => {
         }
     };
 
+    const startEditing = (sale) => {
+        setEditingId(sale._id);
+        setEditedItems(sale.items.map(item => ({ ...item })));
+    };
+
+    const cancelEditing = () => {
+        setEditingId(null);
+        setEditedItems([]);
+    };
+
+    const updateItemQuantity = (index, newQuantity) => {
+        const updated = [...editedItems];
+        updated[index].quantity = parseInt(newQuantity) || 1;
+        setEditedItems(updated);
+    };
+
+    const saveEdits = async (id) => {
+        try {
+            const token = localStorage.getItem('token');
+            await axios.put(`${API_URL}/api/voice-sales/${id}/items`,
+                { items: editedItems },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+
+            // Update local state
+            setPendingSales(prev => prev.map(sale =>
+                sale._id === id ? { ...sale, items: editedItems } : sale
+            ));
+
+            cancelEditing();
+            alert('✅ Items updated successfully');
+        } catch (err) {
+            console.error('Update error:', err);
+            alert('❌ Failed to update items');
+        }
+    };
+
     const getConfidenceBadge = (confidence) => {
         if (confidence >= 0.85) {
             return <span className="px-2 py-1 bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400 text-xs rounded-full font-medium">{(confidence * 100).toFixed(0)}% ✓</span>;
