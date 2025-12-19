@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Mic, MicOff, Loader } from 'lucide-react';
 import { useVoiceRecorder } from '../hooks/useVoiceRecorder';
 import axios from 'axios';
@@ -14,6 +14,7 @@ const FloatingVoiceMic = () => {
     const [isProcessing, setIsProcessing] = useState(false);
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
+    const submittedTranscriptRef = useRef(null); // Track submitted transcripts
 
     const handleMicClick = () => {
         console.log('🎤 Mic button clicked, isRecording:', isRecording);
@@ -22,14 +23,16 @@ const FloatingVoiceMic = () => {
             stopRecording();
         } else {
             console.log('▶️ Starting recording...');
+            submittedTranscriptRef.current = null; // Reset on new recording
             startRecording();
         }
     };
 
     // Auto-submit when recording stops and we have transcript
     useEffect(() => {
-        if (!isRecording && transcript && !isProcessing) {
+        if (!isRecording && transcript && !isProcessing && submittedTranscriptRef.current !== transcript) {
             console.log('✅ Auto-submitting transcript:', transcript);
+            submittedTranscriptRef.current = transcript; // Mark as submitted
             handleSubmitVoiceSale();
         }
     }, [isRecording, transcript, isProcessing]);
