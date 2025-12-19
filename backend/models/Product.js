@@ -6,6 +6,8 @@ const productSchema = new mongoose.Schema({
     category: { type: String },
     unit: { type: String, default: 'pc' }, // pc, kg, ltr
     minStockLevel: { type: Number, default: 5 },
+    sellingPrice: { type: Number, default: 0 },
+    costPrice: { type: Number, default: 0 }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Product', productSchema);

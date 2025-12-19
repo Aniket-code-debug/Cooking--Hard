@@ -6,6 +6,8 @@ const supplierSchema = new mongoose.Schema({
     phone: { type: String, required: true },
     gstin: { type: String },
     address: { type: String },
+    openingBalance: { type: Number, default: 0 },
+    currentBalance: { type: Number, default: 0 }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Supplier', supplierSchema);
