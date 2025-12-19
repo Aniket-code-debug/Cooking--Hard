@@ -39,6 +39,19 @@ const supplierTransactionSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    isSystemGenerated: {
+        type: Boolean,
+        default: true
+    },
+    entrySource: {
+        type: String,
+        enum: ['PURCHASE', 'PAYMENT', 'MANUAL', 'SYSTEM'],
+        default: 'SYSTEM'
+    },
+    isActive: {
+        type: Boolean,
+        default: true
+    },
     createdAt: {
         type: Date,
         default: Date.now,

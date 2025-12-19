@@ -38,6 +38,24 @@ const transactionSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    isSystemGenerated: {
+        type: Boolean,
+        default: true
+    },
+    entrySource: {
+        type: String,
+        enum: ['SALE', 'VOICE_AI', 'MANUAL', 'SYSTEM'],
+        default: 'SYSTEM'
+    },
+    paymentMode: {
+        type: String,
+        enum: ['CASH', 'UPI', 'BANK', 'CREDIT', null],
+        default: null
+    },
+    isActive: {
+        type: Boolean,
+        default: true
+    },
     createdAt: {
         type: Date,
         default: Date.now,
