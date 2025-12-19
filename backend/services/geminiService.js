@@ -31,32 +31,44 @@ async function parseVoiceSaleWithAI(voiceText, inventory) {
         }));
 
         // Create prompt for Gemini
-        const prompt = `You are helping a Kirana (grocery) store owner in India parse voice sales.
+        const prompt = `You are helping a Kirana (grocery) store owner in India parse voice sales in Hindi/Hinglish.
 
-Voice input (may be in Hindi, English, or Hinglish): "${voiceText}"
+Voice input: "${voiceText}"
 
-Available inventory products:
+Available inventory (in English):
 ${JSON.stringify(inventoryList, null, 2)}
 
-Task: Extract which products were mentioned and their quantities.
+CRITICAL INSTRUCTIONS:
+1. **TRANSLATE Hindi words to English first**: 
+   - चीनी/cheeni → sugar
+   - मैगी/maggi → maggi noodles
+   - आटा/atta → flour
+   - नमक/namak → salt
+   - तेल/tel → oil
+   
+2. **Match translated words** with inventory product names (fuzzy matching OK)
 
-Rules:
-1. Match spoken items to inventory products (fuzzy matching OK)
-2. Extract quantity (support Hindi numbers: ek=1, do=2, teen=3, etc.)
-3. Handle Hindi/Hinglish: मैगी/maggi → Maggi, चीनी/cheeni → Sugar
-4. Return confidence score (0.0-1.0) for each match
+3. **Extract quantities**: Support both numbers (1, 2, 3) and Hindi words (ek=1, do=2, teen=3)
 
-Respond ONLY with valid JSON (no markdown):
+4. **Return ONLY products that exist in inventory** - use exact product IDs from inventory list
+
+Example:
+Voice: "दो किलो चीनी"
+Step 1: Translate "चीनी" → "sugar"
+Step 2: Match "sugar" with inventory
+Step 3: Extract quantity "दो" = 2, unit "किलो" = kg
+
+Respond with ONLY valid JSON (no markdown, no explanation):
 {
   "items": [
     {
-      "productId": "actual product _id from inventory",
+      "productId": "exact _id from inventory list above",
       "productName": "exact name from inventory",
-      "spokenName": "what user said",
+      "spokenName": "what was said in voice",
       "quantity": number,
-      "unit": "kg/piece/etc",
-      "confidence": 0.95,
-      "reasoning": "brief explanation"
+      "unit": "kg or piece or liter",
+      "confidence": 0.0-1.0,
+      "reasoning": "translated X to Y, matched with inventory"
     }
   ]
 }`;
