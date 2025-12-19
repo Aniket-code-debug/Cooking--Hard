@@ -16,9 +16,12 @@ const FloatingVoiceMic = () => {
     const [toastMessage, setToastMessage] = useState('');
 
     const handleMicClick = () => {
+        console.log('🎤 Mic button clicked, isRecording:', isRecording);
         if (isRecording) {
+            console.log('⏹️ Stopping recording...');
             stopRecording();
         } else {
+            console.log('▶️ Starting recording...');
             startRecording();
         }
     };
@@ -26,6 +29,7 @@ const FloatingVoiceMic = () => {
     // Auto-submit when recording stops and we have transcript
     useEffect(() => {
         if (!isRecording && transcript && !isProcessing) {
+            console.log('✅ Auto-submitting transcript:', transcript);
             handleSubmitVoiceSale();
         }
     }, [isRecording, transcript, isProcessing]);
@@ -65,14 +69,22 @@ const FloatingVoiceMic = () => {
 
     if (!isSupported) {
         return (
-            <div className="fixed bottom-24 right-6 z-50">
-                <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded-lg shadow-lg max-w-xs">
+            <div className="fixed bottom-6 right-6 z-50">
+                <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg shadow-lg max-w-xs">
+                    <p className="text-sm text-red-600 dark:text-red-400 font-semibold mb-2">
+                        ❌ Voice Not Supported
+                    </p>
                     <p className="text-xs text-red-600 dark:text-red-400">
-                        Voice feature not supported in this browser. Use Chrome/Edge.
+                        Use Chrome or Edge browser
                     </p>
                 </div>
             </div>
         );
+    }
+
+    // Show error prominently if there is one
+    if (error) {
+        console.error('Voice Feature Error:', error);
     }
 
     return (
