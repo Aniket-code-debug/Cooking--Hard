@@ -82,7 +82,7 @@ const CashFlow = () => {
             {/* Transactions List */}
             <div className="space-y-3">
                 {transactions.length === 0 ? (
-                    <div className="bg-white dark:bg-gfg-surface-dark p-8 rounded-xl text-center">
+                    <div className="bg-white dark:bg-gray-800 p-8 rounded-xl text-center border border-gray-200 dark:border-gray-700">
                         <p className="text-gray-500 dark:text-gray-400">No transactions yet</p>
                     </div>
                 ) : (
@@ -93,7 +93,7 @@ const CashFlow = () => {
                         return (
                             <div
                                 key={tx._id}
-                                className="bg-white dark:bg-gfg-surface-dark p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 dark:border-gray-700"
+                                className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 dark:border-gray-700"
                             >
                                 <div className="flex justify-between items-start">
                                     <div className="flex items-start space-x-4 flex-1">
@@ -111,7 +111,7 @@ const CashFlow = () => {
                                                         year: 'numeric'
                                                     })}
                                                 </span>
-                                                <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs font-medium">
+                                                <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs font-medium dark:text-gray-300">
                                                     {tx.type}
                                                 </span>
                                                 {tx.paymentMode && (
