@@ -1,6 +1,6 @@
 const VoiceSale = require('../models/VoiceSale');
 const Product = require('../models/Product');
-const { matchItemsFromVoice } = require('../services/aiMatchService');
+const { parseVoiceSaleWithAI } = require('../services/geminiService');
 
 // Parse voice sale and save to pending queue
 exports.parseVoiceSale = async (req, res) => {
@@ -18,8 +18,8 @@ exports.parseVoiceSale = async (req, res) => {
             return res.status(400).json({ message: 'No inventory items found. Add products first.' });
         }
 
-        // Match items using AI service
-        const matchResult = await matchItemsFromVoice(voiceText, inventory);
+        // Match items using Gemini AI
+        const matchResult = await parseVoiceSaleWithAI(voiceText, inventory);
 
         // Create voice sale record
         const voiceSale = new VoiceSale({
