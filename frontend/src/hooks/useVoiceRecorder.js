@@ -52,7 +52,7 @@ export const useVoiceRecorder = () => {
         };
     }, []);
 
-    const startRecording = useCallback(() => {
+    const startRecording = useCallback(async () => {
         if (!isSupported) {
             setError('Speech recognition not supported');
             return;
@@ -62,11 +62,22 @@ export const useVoiceRecorder = () => {
         setTranscript('');
 
         try {
+            // Check microphone permission first
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                try {
+                    await navigator.mediaDevices.getUserMedia({ audio: true });
+                } catch (permErr) {
+                    setError('Microphone permission denied. Please allow microphone access.');
+                    console.error('Mic permission error:', permErr);
+                    return;
+                }
+            }
+
             recognitionRef.current?.start();
             setIsRecording(true);
         } catch (err) {
             console.error('Failed to start recording:', err);
-            setError('Failed to start recording. Please try again.');
+            setError(`Failed to start: ${err.message || 'Please allow microphone and try again'}`);
         }
     }, [isSupported]);
 
