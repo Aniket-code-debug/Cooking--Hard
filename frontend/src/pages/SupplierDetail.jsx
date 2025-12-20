@@ -19,19 +19,28 @@ const SupplierDetail = () => {
 
     const fetchSupplierDetails = async () => {
         try {
-            const [supplierRes, txRes] = await Promise.all([
-                axios.get(`${API_URL}/api/suppliers/${id}`, {
+            const [supplierRes, accountRes] = await Promise.all([
+                axios.get(`${API_URL}/api/suppliers`, {
                     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
                 }),
                 axios.get(`${API_URL}/api/suppliers/${id}/account`, {
                     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
                 })
             ]);
-            setSupplier(supplierRes.data);
-            setTransactions(txRes.data);
+
+            // Find the specific supplier from the list
+            const foundSupplier = supplierRes.data.find(s => s._id === id);
+            if (!foundSupplier) {
+                throw new Error('Supplier not found');
+            }
+
+            setSupplier(foundSupplier);
+            // Backend returns { supplier, transactions, balance }
+            setTransactions(accountRes.data.transactions || []);
         } catch (error) {
             console.error('Failed to fetch supplier details:', error);
-            alert('Failed to load supplier details');
+            alert('Failed to load supplier details: ' + (error.response?.data?.error || error.message));
+            navigate('/suppliers');
         } finally {
             setLoading(false);
         }
