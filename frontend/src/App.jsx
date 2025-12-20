@@ -15,6 +15,7 @@ import Capital from './pages/Capital';
 import VoiceSales from './pages/VoiceSales';
 import AccountOverview from './pages/AccountOverview';
 import CashFlow from './pages/CashFlow';
+import SupplierDetail from './pages/SupplierDetail';
 
 const PrivateRoute = ({ children }) => {
   const { token } = useAuth();
@@ -39,6 +40,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/inventory" element={<Inventory />} />
               <Route path="/suppliers" element={<Suppliers />} />
+              <Route path="/supplier/:id" element={<SupplierDetail />} />
               <Route path="/purchases" element={<Purchases />} />
               <Route path="/voice-sales" element={<VoiceSales />} />
               <Route path="/reports" element={<Reports />} />

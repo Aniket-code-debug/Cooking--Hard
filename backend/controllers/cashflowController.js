@@ -76,10 +76,12 @@ exports.getAccountOverview = async (req, res) => {
         let totalReceivables = 0;
 
         suppliers.forEach(supplier => {
-            if (supplier.currentBalance < 0) {
-                totalPayables += Math.abs(supplier.currentBalance);
-            } else {
-                totalReceivables += supplier.currentBalance;
+            if (supplier.currentBalance > 0) {
+                // Positive balance = You OWE supplier (PAYABLE)
+                totalPayables += supplier.currentBalance;
+            } else if (supplier.currentBalance < 0) {
+                // Negative balance = Supplier owes you / Advance paid (RECEIVABLE from supplier)
+                totalReceivables += Math.abs(supplier.currentBalance);
             }
         });
 
@@ -104,12 +106,13 @@ exports.getAccountOverview = async (req, res) => {
             }
         ]);
 
-        // Calculate monthly expenses
+        // Calculate monthly expenses (only cash OUT transactions)
         const monthlyExpenses = await Transaction.aggregate([
             {
                 $match: {
                     user: req.user.id,
-                    type: { $in: ['PAYMENT', 'EXPENSE', 'PURCHASE'] },
+                    type: { $in: ['PAYMENT', 'EXPENSE'] }, // Only actual cash payments, not purchases
+                    direction: 'OUT',
                     createdAt: { $gte: startOfMonth }
                 }
             },
