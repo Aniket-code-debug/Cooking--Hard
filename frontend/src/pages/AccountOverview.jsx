@@ -43,7 +43,7 @@ const AccountOverview = () => {
     }
 
     return (
-        <div className="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
+        <div className="p-6 bg-gray-50 dark:bg-gfg-bg-dark min-h-screen">
             <h1 className="text-3xl font-bold mb-6 dark:text-white">Account Overview</h1>
 
             {/* Top Metrics Grid */}

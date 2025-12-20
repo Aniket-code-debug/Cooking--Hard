@@ -44,7 +44,7 @@ const CashFlow = () => {
     }
 
     return (
-        <div className="p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
+        <div className="p-6 bg-gray-50 dark:bg-gfg-bg-dark min-h-screen">
             {/* Header */}
             <div className="mb-6">
                 <h1 className="text-3xl font-bold dark:text-white mb-2">Cash Flow</h1>
