@@ -8,11 +8,14 @@ router.use(authMiddleware);
 
 router.post('/', supplierController.createSupplier);
 router.get('/', supplierController.getSuppliers);
-router.get('/:id', supplierController.getSupplierById);
 
-// Supplier account management
+// IMPORTANT: Specific routes MUST come BEFORE generic /:id routes
+// Supplier account management - these are specific
 router.get('/balances', supplierAccountController.getSupplierBalances);
 router.get('/:id/account', supplierAccountController.getSupplierAccount);
 router.post('/:id/payment', supplierAccountController.recordPayment);
+
+// Generic route - MUST be last
+router.get('/:id', supplierController.getSupplierById);
 
 module.exports = router;
