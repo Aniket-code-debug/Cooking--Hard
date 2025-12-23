@@ -142,7 +142,7 @@ const Inventory = () => {
 
             <button
                 onClick={() => setShowAddModal(true)}
-                className="fixed bottom-24 right-6 md:right-24 bg-gfg-green text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition z-40"
+                className="fixed bottom-36 right-6 md:bottom-24 md:right-24 bg-gfg-green text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition z-40"
             >
                 <Plus size={24} />
             </button>

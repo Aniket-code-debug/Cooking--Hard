@@ -115,9 +115,9 @@ const FloatingVoiceMic = () => {
             <button
                 onClick={handleMicClick}
                 disabled={isProcessing}
-                className={`fixed bottom-6 right-6 z-50 p-4 rounded-full shadow-lg transition-all duration-300 ${isRecording
-                    ? 'bg-red-500 hover:bg-red-600 animate-pulse'
-                    : 'bg-gfg-green hover:bg-blue-700'
+                className={`fixed bottom-24 right-6 z-50 p-4 rounded-full shadow-lg transition-all duration-300 md:bottom-6 ${isRecording
+                        ? 'bg-red-500 hover:bg-red-600 animate-pulse'
+                        : 'bg-gfg-green hover:bg-blue-700'
                     } text-white disabled:opacity-50`}
                 aria-label={isRecording ? 'Stop recording' : 'Start voice sale'}
             >
