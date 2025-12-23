@@ -37,6 +37,8 @@ exports.getProducts = async (req, res) => {
                     category: 1,
                     unit: 1,
                     minStockLevel: 1,
+                    sellingPrice: 1,
+                    costPrice: 1,
                     totalStock: { $sum: '$batches.quantity' }
                 }
             }
