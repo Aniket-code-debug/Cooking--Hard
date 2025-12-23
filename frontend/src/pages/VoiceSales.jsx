@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Mic, Check, X, Edit2, Clock, Trash } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from '../context/ToastContext';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const VoiceSales = () => {
     const navigate = useNavigate();
+    const { showToast } = useToast();
     const [pendingSales, setPendingSales] = useState([]);
     const [loading, setLoading] = useState(true);
     const [editingId, setEditingId] = useState(null);
@@ -25,6 +27,7 @@ const VoiceSales = () => {
             setPendingSales(res.data);
         } catch (err) {
             console.error('Fetch error:', err);
+            showToast('Failed to fetch pending sales', 'error');
         } finally {
             setLoading(false);
         }
@@ -41,7 +44,7 @@ const VoiceSales = () => {
             setPendingSales(prev => prev.filter(sale => sale._id !== id));
 
             // Show success message
-            alert(`✅ ${response.data.message}\n\n📦 Inventory has been updated!\nGo to Inventory page to see changes.`);
+            showToast(`${response.data.message} - Inventory updated!`, 'success');
 
             // Navigate to inventory page after short delay
             setTimeout(() => {
@@ -51,7 +54,7 @@ const VoiceSales = () => {
         } catch (err) {
             console.error('Confirm error:', err);
             const errorMsg = err.response?.data?.message || 'Failed to confirm sale';
-            alert(`❌ ${errorMsg}`);
+            showToast(errorMsg, 'error');
         }
     };
 
@@ -65,10 +68,10 @@ const VoiceSales = () => {
             // Remove from list
             setPendingSales(prev => prev.filter(sale => sale._id !== id));
 
-            alert('Sale rejected');
+            showToast('Sale rejected', 'info');
         } catch (err) {
             console.error('Reject error:', err);
-            alert('Failed to reject sale');
+            showToast('Failed to reject sale', 'error');
         }
     };
 
@@ -102,10 +105,10 @@ const VoiceSales = () => {
             ));
 
             cancelEditing();
-            alert('✅ Items updated successfully');
+            showToast('Items updated successfully', 'success');
         } catch (err) {
             console.error('Update error:', err);
-            alert('❌ Failed to update items');
+            showToast('Failed to update items', 'error');
         }
     };
 

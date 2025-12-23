@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { ToastProvider } from './context/ToastContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Landing from './pages/Landing';
@@ -32,24 +33,26 @@ function App() {
     <Router>
       <AuthProvider>
         <ThemeProvider>
-          <Routes>
-            <Route path="/" element={<PublicRoute><Landing /></PublicRoute>} />
-            <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
-            <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
-            <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/inventory" element={<Inventory />} />
-              <Route path="/suppliers" element={<Suppliers />} />
-              <Route path="/supplier/:id" element={<SupplierDetail />} />
-              <Route path="/purchases" element={<Purchases />} />
-              <Route path="/voice-sales" element={<VoiceSales />} />
-              <Route path="/reports" element={<Reports />} />
-              <Route path="/capital" element={<Capital />} />
-              <Route path="/account-overview" element={<AccountOverview />} />
-              <Route path="/cashflow" element={<CashFlow />} />
-              <Route path="/settings" element={<Settings />} />
-            </Route>
-          </Routes>
+          <ToastProvider>
+            <Routes>
+              <Route path="/" element={<PublicRoute><Landing /></PublicRoute>} />
+              <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+              <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+              <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/inventory" element={<Inventory />} />
+                <Route path="/suppliers" element={<Suppliers />} />
+                <Route path="/supplier/:id" element={<SupplierDetail />} />
+                <Route path="/purchases" element={<Purchases />} />
+                <Route path="/voice-sales" element={<VoiceSales />} />
+                <Route path="/reports" element={<Reports />} />
+                <Route path="/capital" element={<Capital />} />
+                <Route path="/account-overview" element={<AccountOverview />} />
+                <Route path="/cashflow" element={<CashFlow />} />
+                <Route path="/settings" element={<Settings />} />
+              </Route>
+            </Routes>
+          </ToastProvider>
         </ThemeProvider>
       </AuthProvider>
     </Router>

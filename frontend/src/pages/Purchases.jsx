@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useToast } from '../context/ToastContext';
 import { Plus, Trash, Check } from 'lucide-react';
 import FloatingVoiceMic from '../components/FloatingVoiceMic';
 
 const Purchases = () => {
     const API_URL = import.meta.env.VITE_API_URL;
+    const { showToast } = useToast();
     const [suppliers, setSuppliers] = useState([]);
     const [products, setProducts] = useState([]);
     const [step, setStep] = useState(1); // 1: Supplier & Invoice, 2: Items
@@ -47,10 +49,12 @@ const Purchases = () => {
         let total = formData.items.reduce((acc, item) => acc + (item.quantity * item.purchaseRate), 0);
         try {
             await axios.post(`${API_URL}/api/purchases`, { ...formData, totalAmount: total });
-            alert('Purchase Recorded!');
+            showToast('Purchase recorded successfully!', 'success');
             setFormData({ supplier: '', invoiceNumber: '', date: new Date().toISOString().split('T')[0], items: [], cgst: 0, sgst: 0, igst: 0 });
             setStep(1);
-        } catch (err) { alert('Error recording purchase'); }
+        } catch (err) {
+            showToast('Error recording purchase', 'error');
+        }
     };
 
     const inputClass = "w-full p-3 bg-gray-50 dark:bg-gray-800 border-none rounded-lg dark:text-white";

@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Plus, Minus, Search, Filter } from 'lucide-react';
+import { useToast } from '../context/ToastContext';
+import { Plus, Minus, Search, Package } from 'lucide-react';
 import FloatingVoiceMic from '../components/FloatingVoiceMic';
 
 const Inventory = () => {
     const API_URL = import.meta.env.VITE_API_URL;
+    const { showToast } = useToast();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
@@ -66,8 +68,9 @@ const Inventory = () => {
                 }
                 return p;
             }));
+            fetchProducts();
         } catch (err) {
-            alert('Failed to adjust: ' + (err.response?.data?.message || err.message));
+            showToast('Failed to adjust: ' + (err.response?.data?.message || err.message), 'error');
         }
     };
 

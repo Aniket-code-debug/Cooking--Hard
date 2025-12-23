@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useToast } from '../context/ToastContext';
 import { Plus, ArrowUpRight, ArrowDownLeft, Wallet, Building2 } from 'lucide-react';
 
 const Capital = () => {
     const API_URL = import.meta.env.VITE_API_URL;
+    const { showToast } = useToast();
     const [transactions, setTransactions] = useState([]);
     const [summary, setSummary] = useState({ totalCredit: 0, totalDebit: 0, cashInHand: 0, bankBalance: 0 });
     const [showAdd, setShowAdd] = useState(false);
@@ -29,7 +31,10 @@ const Capital = () => {
             setShowAdd(false);
             setNewTx({ type: 'CREDIT', amount: '', category: 'SALES', mode: 'CASH', description: '' });
             fetchData();
-        } catch (err) { alert('Failed to add transaction'); }
+            showToast('Transaction added successfully', 'success');
+        } catch (err) {
+            showToast('Failed to add transaction', 'error');
+        }
     };
 
     const inputClass = "w-full p-2 border rounded dark:bg-gray-800 dark:border-gray-600 dark:text-white";

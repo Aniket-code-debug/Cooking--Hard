@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ArrowLeft, IndianRupee, Calendar, TrendingUp, TrendingDown, Plus } from 'lucide-react';
+import { useToast } from '../context/ToastContext';
 
 const SupplierDetail = () => {
     const API_URL = import.meta.env.VITE_API_URL;
     const { id } = useParams();
     const navigate = useNavigate();
+    const { showToast } = useToast();
     const [supplier, setSupplier] = useState(null);
     const [transactions, setTransactions] = useState([]);
     const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -32,7 +34,7 @@ const SupplierDetail = () => {
             setTransactions(accountRes.data.transactions || []);
         } catch (error) {
             console.error('Failed to fetch supplier details:', error);
-            alert('Failed to load supplier details: ' + (error.response?.data?.error || error.message));
+            showToast('Failed to load supplier details: ' + (error.response?.data?.error || error.message), 'error');
             navigate('/suppliers');
         } finally {
             setLoading(false);
@@ -48,10 +50,10 @@ const SupplierDetail = () => {
             setShowPaymentModal(false);
             setPayment({ amount: '', paymentMode: 'CASH', description: '' });
             fetchSupplierDetails();
-            alert('Payment recorded successfully!');
+            showToast('Payment recorded successfully!', 'success');
         } catch (error) {
             console.error('Payment failed:', error);
-            alert('Failed to record payment: ' + (error.response?.data?.message || error.message));
+            showToast('Failed to record payment: ' + (error.response?.data?.message || error.message), 'error');
         }
     };
 

@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Plus, Phone, MapPin, IndianRupee, ChevronRight } from 'lucide-react';
+import { useToast } from '../context/ToastContext';
 
 const Suppliers = () => {
     const API_URL = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();
+    const { showToast } = useToast();
     const [suppliers, setSuppliers] = useState([]);
     const [showAddForm, setShowAddForm] = useState(false);
     const [newSupplier, setNewSupplier] = useState({ name: '', phone: '', gstin: '', address: '' });
@@ -30,7 +32,10 @@ const Suppliers = () => {
             setShowAddForm(false);
             setNewSupplier({ name: '', phone: '', gstin: '', address: '' });
             fetchSuppliers();
-        } catch (err) { alert('Failed to add supplier'); }
+            showToast('Supplier added successfully!', 'success');
+        } catch (err) {
+            showToast('Failed to add supplier', 'error');
+        }
     };
 
     const inputClass = "px-3 py-2 border rounded dark:bg-gray-800 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-gfg-green focus:outline-none";
