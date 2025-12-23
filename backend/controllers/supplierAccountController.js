@@ -47,7 +47,7 @@ exports.recordPayment = async (req, res) => {
 
     try {
         const { id } = req.params;
-        const { amount, description, paymentMethod = 'Cash' } = req.body;
+        const { amount, description, paymentMode = 'Cash' } = req.body;
 
         if (!amount || amount <= 0) {
             return res.status(400).json({ error: 'Invalid amount' });
@@ -69,7 +69,7 @@ exports.recordPayment = async (req, res) => {
             supplier: id,
             type: 'PAYMENT',
             amount,
-            description: description || `Payment via ${paymentMethod}`,
+            description: description || `Payment via ${paymentMode}`,
             balance: newBalance
         }], { session });
 
