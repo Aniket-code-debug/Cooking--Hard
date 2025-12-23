@@ -1,7 +1,11 @@
+```javascript
 import { Link } from 'react-router-dom';
-import { Mic, TrendingUp, Package, Wallet, Zap, Shield, BarChart3, Users } from 'lucide-react';
+import { Mic, TrendingUp, Package, Wallet, Zap, Shield, BarChart3, Users, Sun, Moon } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 const Landing = () => {
+    const { isDarkMode, toggleTheme } = useTheme();
+    
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
             {/* Header */}
@@ -12,6 +16,15 @@ const Landing = () => {
                             Vyapix
                         </h1>
                         <div className="flex items-center space-x-4">
+                            {/* Dark Mode Toggle */}
+                            <button
+                                onClick={toggleTheme}
+                                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-colors"
+                                aria-label="Toggle dark mode"
+                            >
+                                {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+                            </button>
+                            
                             <Link
                                 to="/login"
                                 className="px-6 py-2 text-gray-700 dark:text-gray-300 hover:text-gfg-green font-medium border-2 border-gray-300 dark:border-gray-600 rounded-lg hover:border-gfg-green transition-all"
