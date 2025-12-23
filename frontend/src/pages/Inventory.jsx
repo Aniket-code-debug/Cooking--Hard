@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useToast } from '../context/ToastContext';
-import { Plus, Minus, Search, Package } from 'lucide-react';
+import { Plus, Minus, Search, X, IndianRupee } from 'lucide-react';
 import FloatingVoiceMic from '../components/FloatingVoiceMic';
 
 const Inventory = () => {
@@ -10,60 +10,71 @@ const Inventory = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [newProduct, setNewProduct] = useState({
+        name: '',
+        category: '',
+        unit: 'pc',
+        minStockLevel: 5,
+        sellingPrice: 0,
+        costPrice: 0
+    });
 
-    useEffect(() => { fetchProducts(); }, []);
+    useEffect(() => {
+        fetchProducts();
+    }, []);
 
     const fetchProducts = async () => {
         setLoading(true);
         try {
-            // Fetch products. Ideally, backend should return total stock already aggregated. 
-            // Our current /products doesn't return total stock, assume we fix backend or fetch alerts for stock??
-            // Wait, standard /products endpoint might not have stock if it's in batches.
-            // Let's modify products endpoint? Or fetch alerts?
-            // "getAlerts" returns low stock.
-            // Let's assume we need to fetch batch/stock info.
-            // Actually, for speed, the /products endpoint SHOULD include query param ?includeStock=true
-            // But I haven't implemented that.
-            // I'll stick to fetching products and locally fetching batches is too slow.
-            // I will use the /alerts endpoint to get stock? No, that only returns LOW stock.
-            // I should have optimized /inventory.
-            // Valid Strategy: fetch /products. For simplicity (MVP), I will just list products.
-            // Stock adjust needs context.
-            // Let's just use /alerts endpoint data? No, that misses healthy items.
-            // I will fetch /inventory/products and then for each product fetch batches? Too heavy (N+1).
-            // Better: update backend getProducts to include totalStock.
-            // Given I cannot easily edit backend again without context switch, I'll try to use what I have.
-            // I will fetch /inventory/products.
-            // Then I will fetch ALL batches once and map them? /inventory/products/:id/batches is endpoint.
-            // I'll fetch /inventory/products. I'll make a helper to fetch stock for visible items?
-            // Or... I'll just Assume "0" if not loaded and let user click to load?
-            // NO, "Everything must be fast".
-            // I should update getProducts in backend. But I'll do a quick hack:
-            // Fetch /alerts? No.
-            // I'll update getProducts to aggregate stock. It's necessary for "View Stock".
-            // See the backend code I have... getProducts just finds Product.
-            // I really should utilize `getAlerts` aggregation logic in `getProducts`.
-            // Okay, I will update Backend `inventoryController.js` to return stock in `getProducts`!
-            // That was part of "Optimize api/inventory" task.
             const res = await axios.get(`${API_URL}/api/inventory/products`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             });
             setProducts(res.data);
-
-            // Temporary: fetch batches for all? Or just render products and allow click to expand?
-            // "One tap actions" implies I see the stock.
-            // I will assume the backend returns stock (I will fix backend next step).
-        } catch (err) { console.error(err); }
+        } catch (err) {
+            console.error(err);
+        }
         setLoading(false);
+    };
+
+    const addProduct = async () => {
+        if (!newProduct.name) {
+            showToast('Please enter product name', 'warning');
+            return;
+        }
+        if (newProduct.sellingPrice <= 0) {
+            showToast('Please enter a valid selling price', 'warning');
+            return;
+        }
+
+        try {
+            await axios.post(`${API_URL}/api/inventory/products`, newProduct, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            });
+
+            showToast('Product added successfully!', 'success');
+            setShowAddModal(false);
+            setNewProduct({
+                name: '',
+                category: '',
+                unit: 'pc',
+                minStockLevel: 5,
+                sellingPrice: 0,
+                costPrice: 0
+            });
+            fetchProducts();
+        } catch (err) {
+            showToast('Failed to add product: ' + (err.response?.data?.message || err.message), 'error');
+        }
     };
 
     const handleQuickAdjust = async (productId, change) => {
         try {
-            await axios.post(`${API_URL} /api/inventory / quick - adjust`, { productId, change });
-            // Optimistic update
+            await axios.post(`${API_URL}/api/inventory/quick-adjust`, { productId, change }, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            });
             setProducts(prev => prev.map(p => {
                 if (p._id === productId) {
-                    // This assumes p.totalStock exists.
                     return { ...p, totalStock: (p.totalStock || 0) + change };
                 }
                 return p;
@@ -96,7 +107,17 @@ const Inventory = () => {
                     <div key={p._id} className="bg-white dark:bg-gfg-surface-dark p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 flex justify-between items-center card-3d">
                         <div className="flex-1">
                             <h3 className="font-bold text-gray-900 dark:text-white text-lg">{p.name}</h3>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">{p.totalStock !== undefined ? `${p.totalStock} ${p.unit} ` : 'Stock info unavailable'}</p>
+                            <div className="flex items-center gap-3 mt-1">
+                                <p className="text-sm text-gray-500 dark:text-gray-400">
+                                    {p.totalStock !== undefined ? `${p.totalStock} ${p.unit}` : 'Stock info unavailable'}
+                                </p>
+                                {p.sellingPrice > 0 && (
+                                    <span className="text-sm font-semibold text-green-600 dark:text-green-400 flex items-center">
+                                        <IndianRupee className="w-3 h-3" />
+                                        {p.sellingPrice}/{p.unit}
+                                    </span>
+                                )}
+                            </div>
                             {p.totalStock <= p.minStockLevel && <span className="text-xs text-red-500 font-bold bg-red-50 px-1 rounded">LOW</span>}
                         </div>
 
@@ -119,9 +140,112 @@ const Inventory = () => {
                 ))}
             </div>
 
-            <button className="fixed bottom-24 right-24 bg-gfg-green text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition z-40">
+            <button
+                onClick={() => setShowAddModal(true)}
+                className="fixed bottom-24 right-6 md:right-24 bg-gfg-green text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition z-40"
+            >
                 <Plus size={24} />
             </button>
+
+            {/* Add Product Modal */}
+            {showAddModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-xl font-bold dark:text-white">Add New Product</h2>
+                            <button onClick={() => setShowAddModal(false)} className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                                <X size={20} className="dark:text-white" />
+                            </button>
+                        </div>
+
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium dark:text-gray-300 mb-1">Product Name *</label>
+                                <input
+                                    type="text"
+                                    value={newProduct.name}
+                                    onChange={e => setNewProduct({ ...newProduct, name: e.target.value })}
+                                    className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                    placeholder="e.g., Sugar, Rice"
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label className="block text-sm font-medium dark:text-gray-300 mb-1">Selling Price * (₹)</label>
+                                    <input
+                                        type="number"
+                                        value={newProduct.sellingPrice}
+                                        onChange={e => setNewProduct({ ...newProduct, sellingPrice: parseFloat(e.target.value) })}
+                                        className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                        placeholder="50"
+                                        min="0"
+                                        step="0.01"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium dark:text-gray-300 mb-1">Cost Price (₹)</label>
+                                    <input
+                                        type="number"
+                                        value={newProduct.costPrice}
+                                        onChange={e => setNewProduct({ ...newProduct, costPrice: parseFloat(e.target.value) })}
+                                        className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                        placeholder="40"
+                                        min="0"
+                                        step="0.01"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label className="block text-sm font-medium dark:text-gray-300 mb-1">Unit</label>
+                                    <select
+                                        value={newProduct.unit}
+                                        onChange={e => setNewProduct({ ...newProduct, unit: e.target.value })}
+                                        className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                    >
+                                        <option value="pc">Piece (pc)</option>
+                                        <option value="kg">Kilogram (kg)</option>
+                                        <option value="ltr">Liter (ltr)</option>
+                                        <option value="gm">Gram (gm)</option>
+                                        <option value="ml">Milliliter (ml)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium dark:text-gray-300 mb-1">Min Stock</label>
+                                    <input
+                                        type="number"
+                                        value={newProduct.minStockLevel}
+                                        onChange={e => setNewProduct({ ...newProduct, minStockLevel: parseInt(e.target.value) })}
+                                        className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                        placeholder="5"
+                                        min="0"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium dark:text-gray-300 mb-1">Category</label>
+                                <input
+                                    type="text"
+                                    value={newProduct.category}
+                                    onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}
+                                    className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                    placeholder="e.g., Groceries, Snacks"
+                                />
+                            </div>
+
+                            <button
+                                onClick={addProduct}
+                                className="w-full bg-gfg-green text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium"
+                            >
+                                Add Product
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <FloatingVoiceMic />
         </div>
