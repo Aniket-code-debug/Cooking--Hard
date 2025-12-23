@@ -1,7 +1,7 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package, ShoppingCart, Users, FileBarChart, LogOut, Sun, Moon, Settings as SettingsIcon, Mic, Wallet, TrendingUp } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import { Home, Package, Users, ShoppingBag, BarChart3, Settings, LogOut, Sun, Moon, Mic, TrendingUp, Wallet, ShoppingCart } from 'lucide-react';
 import BottomNav from './BottomNav';
 
 const Layout = () => {
@@ -10,15 +10,17 @@ const Layout = () => {
     const location = useLocation();
 
     const navItems = [
-        { label: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard size={20} /> },
-        { label: 'Account Overview', path: '/account-overview', icon: <Wallet size={20} /> },
-        { label: 'Cash Flow', path: '/cashflow', icon: <TrendingUp size={20} /> },
-        { label: 'Inventory', path: '/inventory', icon: <Package size={20} /> },
-        { label: 'Purchases', path: '/purchases', icon: <ShoppingCart size={20} /> },
-        { label: 'Suppliers', path: '/suppliers', icon: <Users size={20} /> },
-        { label: 'Voice Sales', path: '/voice-sales', icon: <Mic size={20} /> },
-        { label: 'Reports', path: '/reports', icon: <FileBarChart size={20} /> },
-        { label: 'Settings', path: '/settings', icon: <SettingsIcon size={20} /> },
+        { path: '/dashboard', label: 'Dashboard', icon: <Home size={20} /> },
+        { path: '/inventory', label: 'Inventory', icon: <Package size={20} /> },
+        { path: '/suppliers', label: 'Suppliers', icon: <Users size={20} /> },
+        { path: '/purchases', label: 'Purchases', icon: <ShoppingBag size={20} /> },
+        { path: '/voice-sales', label: 'Voice Sales', icon: <Mic size={20} /> },
+        { path: '/sales', label: 'Sales', icon: <ShoppingCart size={20} /> },
+        { path: '/reports', label: 'Reports', icon: <BarChart3 size={20} /> },
+        { path: '/capital', label: 'Capital', icon: <Wallet size={20} /> },
+        { path: '/account-overview', label: 'Financial Dashboard', icon: <TrendingUp size={20} /> },
+        { path: '/cashflow', label: 'Cash Flow', icon: <TrendingUp size={20} /> },
+        { path: '/settings', label: 'Settings', icon: <Settings size={20} /> },
     ];
 
     return (

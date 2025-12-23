@@ -14,6 +14,7 @@ import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 import Capital from './pages/Capital';
 import VoiceSales from './pages/VoiceSales';
+import Sales from './pages/Sales';
 import AccountOverview from './pages/AccountOverview';
 import CashFlow from './pages/CashFlow';
 import SupplierDetail from './pages/SupplierDetail';
@@ -45,6 +46,7 @@ function App() {
                 <Route path="/supplier/:id" element={<SupplierDetail />} />
                 <Route path="/purchases" element={<Purchases />} />
                 <Route path="/voice-sales" element={<VoiceSales />} />
+                <Route path="/sales" element={<Sales />} />
                 <Route path="/reports" element={<Reports />} />
                 <Route path="/capital" element={<Capital />} />
                 <Route path="/account-overview" element={<AccountOverview />} />
