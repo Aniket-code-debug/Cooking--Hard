@@ -267,7 +267,7 @@ const Inventory = () => {
                                         <input
                                             type="number"
                                             value={newProduct.initialStock}
-                                            onChange={e => setNewProduct({ ...newProduct, initialStock: parseFloat(e.target.value) || 0 })}
+                                            onChange={e => setNewProduct({ ...newProduct, initialStock: e.target.value === '' ? 0 : parseFloat(e.target.value) })}
                                             className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                             placeholder="0"
                                             min="0"
