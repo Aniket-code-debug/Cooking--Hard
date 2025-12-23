@@ -8,7 +8,7 @@ exports.getSupplierAccount = async (req, res) => {
         const { id } = req.params;
         const { startDate, endDate, type } = req.query;
 
-        const supplier = await Supplier.findOne({ _id: id, user: req.user.id });
+        const supplier = await Supplier.findOne({ _id: id, user: req.user._id });
 
         if (!supplier) {
             return res.status(404).json({ error: 'Supplier not found' });
@@ -53,7 +53,7 @@ exports.recordPayment = async (req, res) => {
             return res.status(400).json({ error: 'Invalid amount' });
         }
 
-        const supplier = await Supplier.findOne({ _id: id, user: req.user.id }).session(session);
+        const supplier = await Supplier.findOne({ _id: id, user: req.user._id }).session(session);
 
         if (!supplier) {
             await session.abortTransaction();
@@ -65,7 +65,7 @@ exports.recordPayment = async (req, res) => {
 
         // Create supplier transaction
         const supplierTx = await SupplierTransaction.create([{
-            user: req.user.id,
+            user: req.user._id,
             supplier: id,
             type: 'PAYMENT',
             amount,
@@ -81,10 +81,10 @@ exports.recordPayment = async (req, res) => {
         const Transaction = require('../models/Transaction');
         const { calculateNewBalance } = require('../utils/balanceCalculator');
 
-        const cashBalance = await calculateNewBalance(req.user.id, amount, 'OUT');
+        const cashBalance = await calculateNewBalance(req.user._id, amount, 'OUT');
 
         await Transaction.create([{
-            user: req.user.id,
+            user: req.user._id,
             type: 'PAYMENT',
             direction: 'OUT',
             amount,
