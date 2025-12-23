@@ -27,7 +27,7 @@ const Layout = () => {
             <aside className="w-64 bg-white dark:bg-surface-dark shadow-md hidden md:flex flex-col">
                 <div className="p-6">
                     <h1 className="text-2xl font-bold text-primary dark:text-white drop-shadow-lg">
-                        KiranaFlow
+                        Vyapix
                     </h1>
                     <p className="text-sm text-gray-500 dark:text-gray-300 mt-1">{user?.shopName}</p>
                 </div>

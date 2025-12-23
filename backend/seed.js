@@ -35,7 +35,7 @@ const seed = async () => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash('password123', salt);
         const user = new User({
-            shopName: 'Demo Kirana Store',
+            shopName: 'Demo Retail Store',
             ownerName: 'Rahul',
             email: 'test@example.com',
             password: hashedPassword

@@ -5,7 +5,7 @@ import { Save, User } from 'lucide-react';
 const Settings = () => {
     const { user } = useAuth();
     // Placeholder state for demo
-    const [shopName, setShopName] = useState(user?.shopName || 'Apna Kirana Store');
+    const [shopName, setShopName] = useState(user?.shopName || 'My Store');
     const [address, setAddress] = useState('Mumbai, India');
 
     const handleSave = () => {

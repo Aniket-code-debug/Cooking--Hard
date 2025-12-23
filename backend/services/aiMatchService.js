@@ -33,7 +33,7 @@ function fuzzyMatchProducts(voiceText, inventory) {
     const items = [];
     const text = voiceText.toLowerCase();
 
-    // Common Hindi/English mappings for Kirana products
+    // Common Hindi/English mappings for retail products
     const translations = {
         // Devanagari script
         'मैगी': 'maggi',

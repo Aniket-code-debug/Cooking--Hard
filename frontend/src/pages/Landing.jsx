@@ -12,7 +12,7 @@ const Landing = () => {
                             <span className="text-white font-bold text-xl">K</span>
                         </div>
                         <h1 className="text-2xl font-bold bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">
-                            KiranaFlow
+                            Vyapix
                         </h1>
                     </div>
                     <div className="flex items-center space-x-4">
@@ -38,12 +38,12 @@ const Landing = () => {
                     <div className="inline-flex items-center space-x-2 bg-green-100 dark:bg-green-900/30 px-4 py-2 rounded-full mb-6">
                         <Zap className="w-4 h-4 text-green-600 dark:text-green-400" />
                         <span className="text-green-700 dark:text-green-300 text-sm font-medium">
-                            AI-Powered Kirana Management
+                            AI-Powered Store Management
                         </span>
                     </div>
 
                     <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-                        Manage Your Kirana Store
+                        Manage Your Store
                         <br />
                         <span className="bg-gradient-to-r from-green-600 via-teal-600 to-blue-600 bg-clip-text text-transparent">
                             Like Never Before
@@ -52,7 +52,7 @@ const Landing = () => {
 
                     <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
                         Voice-powered sales, real-time cash flow tracking, and AI insights—all in one beautiful dashboard.
-                        Built for modern Kirana shop owners who want to grow smarter.
+                        Built for modern shop owners who want to grow smarter.
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
@@ -80,7 +80,7 @@ const Landing = () => {
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
                 <div className="text-center mb-16">
                     <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                        Everything Your Kirana Store Needs
+                        Everything Your Store Needs
                     </h2>
                     <p className="text-xl text-gray-600 dark:text-gray-300">
                         Powerful features designed for Indian shop owners
@@ -181,10 +181,10 @@ const Landing = () => {
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
                 <div className="bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-800 dark:to-gray-900 rounded-3xl p-12 text-center shadow-2xl">
                     <h2 className="text-4xl font-bold text-white mb-4">
-                        Ready to Transform Your Kirana Store?
+                        Ready to Transform Your Store?
                     </h2>
                     <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                        Join hundreds of shop owners who've already digitized their business with KiranaFlow.
+                        Join hundreds of shop owners who've already digitized their business with Vyapix.
                     </p>
                     <Link
                         to="/register"
@@ -198,7 +198,7 @@ const Landing = () => {
             {/* Footer */}
             <footer className="bg-gray-900 dark:bg-black text-gray-400 py-8">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <p>&copy; 2025 KiranaFlow. Built with ❤️ for Indian Kirana Stores.</p>
+                    <p>&copy; 2025 Vyapix. Built with ❤️ for Indian Retail Stores.</p>
                 </div>
             </footer>
         </div>

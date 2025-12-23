@@ -44,7 +44,7 @@ const Login = () => {
                     {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
                 </button>
 
-                <h2 className="text-3xl font-bold text-center text-gfg-green mb-2">KiranaFlow</h2>
+                <h2 className="text-3xl font-bold text-center text-gfg-green mb-2">Vyapix</h2>
                 <p className="text-center text-gray-500 dark:text-gray-400 mb-8">Sign in to manage your shop</p>
 
                 {error && (

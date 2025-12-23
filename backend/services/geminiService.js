@@ -70,7 +70,7 @@ async function parseVoiceSaleWithAI(voiceText, inventory) {
         }));
 
         // Create prompt for Gemini
-        const prompt = `You are helping a Kirana (grocery) store owner in India parse voice sales in Hindi/Hinglish.
+        const prompt = `You are helping a retail store owner in India parse voice sales in Hindi/Hinglish.
 
 Voice input: "${voiceText}"
 
