@@ -38,7 +38,7 @@ exports.createPurchase = async (req, res) => {
         }
 
         const purchase = new Purchase({
-            user: req.user.id,
+            user: req.user._id,
             supplier,
             invoiceNumber,
             date,
@@ -57,7 +57,7 @@ exports.createPurchase = async (req, res) => {
             const newBalance = await calculateSupplierBalance(supplier, totalAmount, 'PURCHASE');
 
             await SupplierTransaction.create([{
-                user: req.user.id,
+                user: req.user._id,
                 supplier,
                 type: 'PURCHASE',
                 amount: totalAmount,
@@ -86,9 +86,10 @@ exports.createPurchase = async (req, res) => {
 
 exports.getPurchases = async (req, res) => {
     try {
-        const purchases = await Purchase.find({ user: req.user.id }).populate('supplier').populate('items.product').sort({ date: -1 });
+        const purchases = await Purchase.find({ user: req.user._id }).populate('supplier').populate('items.product').sort({ date: -1 });
         res.json(purchases);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 };
+

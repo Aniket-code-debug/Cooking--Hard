@@ -6,7 +6,7 @@ exports.createProduct = async (req, res) => {
     try {
         const { name, category, unit, minStockLevel } = req.body;
         const product = new Product({
-            user: req.user.id,
+            user: req.user._id,
             name, category, unit, minStockLevel
         });
         await product.save();
@@ -19,7 +19,7 @@ exports.createProduct = async (req, res) => {
 exports.getProducts = async (req, res) => {
     try {
         const mongoose = require('mongoose');
-        const userId = new mongoose.Types.ObjectId(req.user.id);
+        const userId = new mongoose.Types.ObjectId(req.user._id);
 
         const products = await Product.aggregate([
             { $match: { user: userId } },
@@ -143,7 +143,7 @@ exports.quickAdjust = async (req, res) => {
 exports.getAlerts = async (req, res) => {
     try {
         const mongoose = require('mongoose');
-        const userId = new mongoose.Types.ObjectId(req.user.id);
+        const userId = new mongoose.Types.ObjectId(req.user._id);
 
         // 1. Low Stock Alert (Aggregation)
         const lowStockProducts = await Product.aggregate([
@@ -196,3 +196,4 @@ exports.getAlerts = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
