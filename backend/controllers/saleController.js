@@ -17,7 +17,7 @@ exports.createSale = async (req, res) => {
 
         // Create the sale record
         const sale = new Sale({
-            user: req.user._id,
+            user: req.user.id,
             items,
             totalAmount,
             paymentMode: paymentMode || 'CASH',
@@ -59,7 +59,7 @@ exports.createSale = async (req, res) => {
 
         // Create Transaction (Cash IN)
         const transaction = new Transaction({
-            user: req.user._id,
+            user: req.user.id,
             type: 'SALE',
             direction: 'IN',
             amount: totalAmount,
@@ -91,7 +91,7 @@ exports.getSales = async (req, res) => {
     try {
         const { limit = 100 } = req.query;
 
-        const sales = await Sale.find({ user: req.user._id })
+        const sales = await Sale.find({ user: req.user.id })
             .populate('items.product', 'name')
             .sort({ createdAt: -1 })
             .limit(parseInt(limit));
@@ -107,7 +107,7 @@ exports.getSaleById = async (req, res) => {
     try {
         const sale = await Sale.findOne({
             _id: req.params.id,
-            user: req.user._id
+            user: req.user.id
         }).populate('items.product', 'name sellingPrice');
 
         if (!sale) {
@@ -119,3 +119,4 @@ exports.getSaleById = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+

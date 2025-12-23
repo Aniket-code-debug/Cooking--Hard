@@ -8,7 +8,7 @@ exports.getCashFlow = async (req, res) => {
     try {
         const { startDate, endDate, type } = req.query;
 
-        const filter = { user: req.user._id };
+        const filter = { user: req.user.id };
 
         // Date range filter
         if (startDate || endDate) {
@@ -24,7 +24,7 @@ exports.getCashFlow = async (req, res) => {
             .sort({ createdAt: -1 })
             .limit(100);
 
-        const currentBalance = await getCurrentCashBalance(req.user._id);
+        const currentBalance = await getCurrentCashBalance(req.user.id);
 
         res.json({
             transactions,
@@ -44,10 +44,10 @@ exports.createCashEntry = async (req, res) => {
             return res.status(400).json({ error: 'Invalid type for manual entry' });
         }
 
-        const balance = await calculateNewBalance(req.user._id, amount, direction);
+        const balance = await calculateNewBalance(req.user.id, amount, direction);
 
         const transaction = await Transaction.create({
-            user: req.user._id,
+            user: req.user.id,
             type,
             direction,
             amount,
@@ -64,7 +64,7 @@ exports.createCashEntry = async (req, res) => {
 // Get account overview dashboard
 exports.getAccountOverview = async (req, res) => {
     try {
-        const userId = req.user._id;
+        const userId = req.user.id;
 
         // Get current cash balance
         const cashInHand = await getCurrentCashBalance(userId);
@@ -93,7 +93,7 @@ exports.getAccountOverview = async (req, res) => {
         const monthlyRevenue = await Transaction.aggregate([
             {
                 $match: {
-                    user: req.user._id,
+                    user: req.user.id,
                     type: 'SALE',
                     createdAt: { $gte: startOfMonth }
                 }
@@ -110,7 +110,7 @@ exports.getAccountOverview = async (req, res) => {
         const monthlyExpenses = await Transaction.aggregate([
             {
                 $match: {
-                    user: req.user._id,
+                    user: req.user.id,
                     type: { $in: ['PAYMENT', 'EXPENSE'] }, // Only actual cash payments, not purchases
                     direction: 'OUT',
                     createdAt: { $gte: startOfMonth }
@@ -146,4 +146,5 @@ exports.getAccountOverview = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
 

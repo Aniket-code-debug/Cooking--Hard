@@ -4,7 +4,7 @@ exports.createSupplier = async (req, res) => {
     try {
         const { name, phone, gstin, address } = req.body;
         const supplier = new Supplier({
-            user: req.user._id,
+            user: req.user.id,
             name, phone, gstin, address
         });
         await supplier.save();
@@ -16,7 +16,7 @@ exports.createSupplier = async (req, res) => {
 
 exports.getSuppliers = async (req, res) => {
     try {
-        const suppliers = await Supplier.find({ user: req.user._id });
+        const suppliers = await Supplier.find({ user: req.user.id });
         res.json(suppliers);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -28,7 +28,7 @@ exports.getSupplierById = async (req, res) => {
     try {
         const supplier = await Supplier.findOne({
             _id: req.params.id,
-            user: req.user._id
+            user: req.user.id
         });
 
         if (!supplier) {
@@ -40,3 +40,4 @@ exports.getSupplierById = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+

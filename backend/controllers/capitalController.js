@@ -4,7 +4,7 @@ exports.addTransaction = async (req, res) => {
     try {
         const { type, category, amount, date, mode, description } = req.body;
         const transaction = new CapitalTransaction({
-            user: req.user._id,
+            user: req.user.id,
             type, category, amount, date, mode, description
         });
         await transaction.save();
@@ -16,7 +16,7 @@ exports.addTransaction = async (req, res) => {
 
 exports.getTransactions = async (req, res) => {
     try {
-        const transactions = await CapitalTransaction.find({ user: req.user._id }).sort({ date: -1 });
+        const transactions = await CapitalTransaction.find({ user: req.user.id }).sort({ date: -1 });
         res.json(transactions);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -26,7 +26,7 @@ exports.getTransactions = async (req, res) => {
 exports.getSummary = async (req, res) => {
     try {
         const mongoose = require('mongoose');
-        const userId = new mongoose.Types.ObjectId(req.user._id);
+        const userId = new mongoose.Types.ObjectId(req.user.id);
 
         const stats = await CapitalTransaction.aggregate([
             { $match: { user: userId } },
@@ -66,4 +66,5 @@ exports.getSummary = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
 
