@@ -8,6 +8,7 @@ router.use(authMiddleware);
 
 router.post('/', supplierController.createSupplier);
 router.get('/', supplierController.getSuppliers);
+router.get('/:id', supplierController.getSupplierById);
 
 // Supplier account management
 router.get('/balances', supplierAccountController.getSupplierBalances);
