@@ -8,6 +8,7 @@ const Inventory = () => {
     const API_URL = import.meta.env.VITE_API_URL;
     const { showToast } = useToast();
     const [products, setProducts] = useState([]);
+    const [suppliers, setSuppliers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [showAddModal, setShowAddModal] = useState(false);
@@ -17,12 +18,28 @@ const Inventory = () => {
         unit: 'pc',
         minStockLevel: 5,
         sellingPrice: 0,
-        costPrice: 0
+        costPrice: 0,
+        initialStock: 0,
+        supplierId: '',
+        batchNumber: '',
+        expiryDate: ''
     });
 
     useEffect(() => {
         fetchProducts();
+        fetchSuppliers();
     }, []);
+
+    const fetchSuppliers = async () => {
+        try {
+            const res = await axios.get(`${API_URL}/api/suppliers`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            });
+            setSuppliers(res.data);
+        } catch (err) {
+            console.error('Failed to fetch suppliers:', err);
+        }
+    };
 
     const fetchProducts = async () => {
         setLoading(true);
@@ -60,7 +77,11 @@ const Inventory = () => {
                 unit: 'pc',
                 minStockLevel: 5,
                 sellingPrice: 0,
-                costPrice: 0
+                costPrice: 0,
+                initialStock: 0,
+                supplierId: '',
+                batchNumber: '',
+                expiryDate: ''
             });
             fetchProducts();
         } catch (err) {
@@ -234,6 +255,68 @@ const Inventory = () => {
                                     className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     placeholder="e.g., Groceries, Snacks"
                                 />
+                            </div>
+
+                            {/* Initial Stock Section */}
+                            <div className="border-t pt-4 mt-4 dark:border-gray-700">
+                                <h3 className="text-sm font-semibold dark:text-white mb-3">Initial Stock (Optional)</h3>
+
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label className="block text-sm font-medium dark:text-gray-300 mb-1">Stock Quantity</label>
+                                        <input
+                                            type="number"
+                                            value={newProduct.initialStock}
+                                            onChange={e => setNewProduct({ ...newProduct, initialStock: parseFloat(e.target.value) || 0 })}
+                                            className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                            placeholder="0"
+                                            min="0"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium dark:text-gray-300 mb-1">Supplier</label>
+                                        <select
+                                            value={newProduct.supplierId}
+                                            onChange={e => setNewProduct({ ...newProduct, supplierId: e.target.value })}
+                                            className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                        >
+                                            <option value="">None (Self Purchase)</option>
+                                            {suppliers.map(s => (
+                                                <option key={s._id} value={s._id}>{s.name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                {newProduct.initialStock > 0 && (
+                                    <div className="grid grid-cols-2 gap-3 mt-3">
+                                        <div>
+                                            <label className="block text-sm font-medium dark:text-gray-300 mb-1">Batch Number</label>
+                                            <input
+                                                type="text"
+                                                value={newProduct.batchNumber}
+                                                onChange={e => setNewProduct({ ...newProduct, batchNumber: e.target.value })}
+                                                className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                                placeholder="Auto-generated"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium dark:text-gray-300 mb-1">Expiry Date</label>
+                                            <input
+                                                type="date"
+                                                value={newProduct.expiryDate}
+                                                onChange={e => setNewProduct({ ...newProduct, expiryDate: e.target.value })}
+                                                className="w-full px-3 py-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+
+                                {newProduct.initialStock > 0 && (
+                                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                                        Total Cost: ₹{(newProduct.initialStock * newProduct.costPrice).toFixed(2)}
+                                    </p>
+                                )}
                             </div>
 
                             <button

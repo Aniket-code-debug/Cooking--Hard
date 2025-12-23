@@ -3,9 +3,18 @@ const Batch = require('../models/Batch');
 
 // Product CRUD
 exports.createProduct = async (req, res) => {
+    const mongoose = require('mongoose');
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
     try {
-        const { name, category, unit, minStockLevel, sellingPrice, costPrice } = req.body;
-        const product = new Product({
+        const {
+            name, category, unit, minStockLevel, sellingPrice, costPrice,
+            initialStock, supplierId, batchNumber, expiryDate
+        } = req.body;
+
+        // 1. Create product
+        const product = await Product.create([{
             user: req.user.id,
             name,
             category,
@@ -13,11 +22,87 @@ exports.createProduct = async (req, res) => {
             minStockLevel,
             sellingPrice: sellingPrice || 0,
             costPrice: costPrice || 0
-        });
-        await product.save();
-        res.status(201).json(product);
+        }], { session });
+
+        const productId = product[0]._id;
+
+        // 2. If initial stock provided, create batch and purchase
+        if (initialStock && initialStock > 0) {
+            const Supplier = require('../models/Supplier');
+            const Purchase = require('../models/Purchase');
+            const SupplierTransaction = require('../models/SupplierTransaction');
+            const { calculateSupplierBalance } = require('../utils/supplierBalanceCalculator');
+
+            // Create batch
+            await Batch.create([{
+                user: req.user.id,
+                product: productId,
+                quantity: initialStock,
+                batchNumber: batchNumber || `INIT-${Date.now()}`,
+                expiryDate: expiryDate ? new Date(expiryDate) : null,
+                purchaseRate: costPrice || 0,
+                sellingPrice: sellingPrice || 0
+            }], { session });
+
+            const totalAmount = initialStock * (costPrice || 0);
+            const invoiceNumber = `INIT-${Date.now()}`;
+
+            // Create purchase record
+            const purchase = await Purchase.create([{
+                user: req.user.id,
+                supplier: supplierId || null,
+                invoiceNumber,
+                items: [{
+                    product: productId,
+                    quantity: initialStock,
+                    rate: costPrice || 0,
+                    amount: totalAmount
+                }],
+                totalAmount,
+                date: new Date()
+            }], { session });
+
+            // If supplier selected, update supplier balance
+            if (supplierId) {
+                const supplier = await Supplier.findOne({
+                    _id: supplierId,
+                    user: req.user.id
+                }).session(session);
+
+                if (!supplier) {
+                    await session.abortTransaction();
+                    return res.status(404).json({ error: 'Supplier not found' });
+                }
+
+                // Calculate new supplier balance
+                const newBalance = await calculateSupplierBalance(supplierId, totalAmount, 'PURCHASE');
+
+                // Create supplier transaction
+                await SupplierTransaction.create([{
+                    user: req.user.id,
+                    supplier: supplierId,
+                    type: 'PURCHASE',
+                    amount: totalAmount,
+                    description: `Initial stock for ${name}`,
+                    balance: newBalance,
+                    referenceId: purchase[0]._id,
+                    referenceModel: 'Purchase'
+                }], { session });
+
+                // Update supplier balance
+                supplier.currentBalance = newBalance;
+                await supplier.save({ session });
+            }
+        }
+
+        await session.commitTransaction();
+        res.status(201).json(product[0]);
     } catch (err) {
+        await session.abortTransaction();
+        console.error('Create product error:', err);
         res.status(500).json({ error: err.message });
+    } finally {
+        session.endSession();
     }
 };
 
