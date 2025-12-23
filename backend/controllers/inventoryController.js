@@ -229,6 +229,7 @@ exports.quickAdjust = async (req, res) => {
                 quantity: change,
                 batchNumber: `REFILL-${Date.now()}`,
                 expiryDate: null,
+                mrp: product.sellingPrice || 0,
                 purchaseRate: product.costPrice || 0,
                 sellingPrice: product.sellingPrice || 0
             });
