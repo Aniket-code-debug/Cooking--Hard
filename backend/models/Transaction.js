@@ -32,7 +32,7 @@ const transactionSchema = new mongoose.Schema({
     },
     referenceModel: {
         type: String,
-        enum: ['Sale', 'VoiceSale', 'Purchase', 'Payment', null]
+        enum: ['Sale', 'VoiceSale', 'Purchase', 'Payment', 'SupplierTransaction', null]
     },
     balance: {
         type: Number,
