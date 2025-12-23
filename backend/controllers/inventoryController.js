@@ -4,10 +4,15 @@ const Batch = require('../models/Batch');
 // Product CRUD
 exports.createProduct = async (req, res) => {
     try {
-        const { name, category, unit, minStockLevel } = req.body;
+        const { name, category, unit, minStockLevel, sellingPrice, costPrice } = req.body;
         const product = new Product({
             user: req.user._id,
-            name, category, unit, minStockLevel
+            name,
+            category,
+            unit,
+            minStockLevel,
+            sellingPrice: sellingPrice || 0,
+            costPrice: costPrice || 0
         });
         await product.save();
         res.status(201).json(product);
