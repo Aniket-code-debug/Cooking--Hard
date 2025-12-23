@@ -74,11 +74,17 @@ const seed = async () => {
         ];
 
         for (let pData of productList) {
+            // Generate prices based on product type
+            const baseCost = Math.floor(Math.random() * 30) + 20; // 20-50
+            const sellingPrice = Math.floor(baseCost * 1.3); // 30% markup
+
             const prod = new Product({
                 name: pData.name,
                 unit: pData.unit,
                 category: pData.category,
-                minStockLevel: pData.minStock, // Mapped correctly
+                minStockLevel: pData.minStock,
+                costPrice: baseCost,
+                sellingPrice: sellingPrice,
                 user: user._id
             });
             await prod.save();
