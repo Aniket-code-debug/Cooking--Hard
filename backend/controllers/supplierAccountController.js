@@ -103,6 +103,8 @@ exports.recordPayment = async (req, res) => {
         });
     } catch (err) {
         await session.abortTransaction();
+        console.error('Supplier payment error:', err);
+        console.error('Error stack:', err.stack);
         res.status(500).json({ error: err.message });
     } finally {
         session.endSession();
