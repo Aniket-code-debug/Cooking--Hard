@@ -212,9 +212,28 @@ exports.quickAdjust = async (req, res) => {
         const batches = await Batch.find({ product: productId, quantity: { $gt: 0 } }).sort({ expiryDate: sortOrder });
 
         if (batches.length === 0) {
-            // If adding and no batches exist, maybe allow? But we need batch info.
-            // For now, require at least one batch to exist to "adjust" it.
-            return res.status(404).json({ message: 'No active batches found to adjust' });
+            // If deducting and no batches, error
+            if (isDeduct) {
+                return res.status(404).json({ message: 'No active batches found to adjust' });
+            }
+
+            // If adding (+) and no batches exist, auto-create a new batch
+            const product = await Product.findById(productId);
+            if (!product) {
+                return res.status(404).json({ message: 'Product not found' });
+            }
+
+            const newBatch = new Batch({
+                user: req.user.id,
+                product: productId,
+                quantity: change,
+                batchNumber: `REFILL-${Date.now()}`,
+                expiryDate: null,
+                purchaseRate: product.costPrice || 0,
+                sellingPrice: product.sellingPrice || 0
+            });
+            await newBatch.save();
+            return res.json({ message: 'New batch created and stock updated', batch: newBatch });
         }
 
         let batchToUpdate = batches[0];
